@@ -14,6 +14,7 @@ public class DonorManagement {
     public static void display(){
          Scanner scanner = new Scanner(System.in);
         while (true) {
+            System.out.println("0. Exit");
             System.out.println("1. Add a new donor");
             System.out.println("2. Remove a donor");
             System.out.println("3. Update donor details");
