@@ -2,15 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package charity;
+package charity.boundaries;
 
+import charity.*;
 import java.util.Scanner;
 
 /**
  *
  * @author quinton
  */
-public class DonorManagement {
+public class DoneeManagement {
     public static void display(){
          Scanner scanner = new Scanner(System.in);
         while (true) {

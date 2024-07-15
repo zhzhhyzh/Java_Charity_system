@@ -4,6 +4,9 @@
  */
 package charity;
 
+import charity.boundaries.DonationManagement;
+import charity.boundaries.DoneeManagement;
+import charity.boundaries.DonorManagement;
 import java.util.Scanner;
 
 /**
@@ -29,6 +32,12 @@ public class Charity {
             switch (input) {
                 case "1":
                     DonorManagement.display();
+                    break;
+                case "2":
+                    DoneeManagement.display();
+                    break;
+                case "3":
+                    DonationManagement.display();
                     break;
                 case "0":
                     break;
