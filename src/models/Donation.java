@@ -4,10 +4,6 @@
  */
 package models;
 
-/**
- *
- * @author quinton
- */
 public class Donation {
     
 }
