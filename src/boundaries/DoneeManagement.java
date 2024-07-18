@@ -5,7 +5,14 @@
 package boundaries;
 
 import charity.*;
+import controls.Common;
+import java.io.IOException;
+import java.util.Date;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import models.Donee;
+import utils.LinkedList;
 
 /**
  *
@@ -35,4 +42,19 @@ public class DoneeManagement {
             }
         }
     }
+      private static final LinkedList<Donee> donee = new LinkedList<>();
+
+
+   public void create(){} 
+    public void update(){}
+    public void delete(){}   
+    public void detail(String doneeId){}  
+    public void list(){} 
+    public void filter(int age, boolean activeStatus, char financialType, char currentSituation){}
+    public void generate(){}
+
+
+
+
+    
 }
