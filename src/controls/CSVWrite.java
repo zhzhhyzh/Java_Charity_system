@@ -1,4 +1,4 @@
-package charity.controls;
+package controls;
 
 import java.io.File;
 import java.io.FileNotFoundException;

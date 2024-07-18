@@ -2,10 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package charity.utils;
+package utils;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -39,6 +44,25 @@ public class LinkedList<E>
             insertMiddle(data, node(index));
         }
     }
+    
+    public Object get(String value, String methodToGetValue){
+
+              for (Node<E> node = head;
+                node != null;
+                node = node.next) {
+//                                            System.out.println(Arrays.toString(node.data.getClass().getDeclaredFields()));;
+
+                  try {
+                      Method method = node.data.getClass().getDeclaredMethod(methodToGetValue);
+                        String valueFound =  (String) method.invoke(node.data);
+                      if(valueFound.equals(value)) return node.data;
+                  } catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
+                      Logger.getLogger(LinkedList.class.getName()).log(Level.SEVERE, null, ex);
+                  }
+        }
+        
+       return null;
+    } 
 
     @Override
     public void clear() {

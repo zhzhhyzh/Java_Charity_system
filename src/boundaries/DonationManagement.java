@@ -2,16 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package charity.boundaries;
+package boundaries;
 
 import charity.*;
+import utils.LinkedList;
 import java.util.Scanner;
 
 /**
  *
  * @author quinton
  */
-public class DoneeManagement {
+public class DonationManagement {
     public static void display(){
          Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -26,7 +27,9 @@ public class DoneeManagement {
             String input = scanner.next();
             switch (input) {
                 case "1":
-
+                       LinkedList<Integer> ll = new LinkedList<>();
+                       ll.add(1);
+                       System.out.println(ll.get(0));
                     break;
                 case "0":
                     break;

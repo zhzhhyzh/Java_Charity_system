@@ -4,7 +4,7 @@
  */
 package models;
 
-import charity.utils.LinkedList;
+import utils.LinkedList;
 import java.util.Date;
 
 /**
@@ -13,6 +13,20 @@ import java.util.Date;
  */
 public class Donor {
 
+    @Override
+    public String toString() {
+        return "Donor{" + "donorID=" + donorID + ", name=" + name + ", age=" + age + ", dob=" + dob + ", gender=" + gender + '}';
+    }
+
+    public String getDonorID() {
+        return donorID;
+    }
+
+    public void setDonorID(String donorID) {
+        this.donorID = donorID;
+    }
+
+    
     public Donor(String donorID,String name, int age, Date dob, char gender) {
         this.donorID = donorID;
         this.name = name;

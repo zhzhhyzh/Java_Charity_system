@@ -4,9 +4,9 @@
  */
 package charity;
 
-import charity.boundaries.DonationManagement;
-import charity.boundaries.DoneeManagement;
-import charity.boundaries.DonorManagement;
+import boundaries.DonationManagement;
+import boundaries.DoneeManagement;
+import boundaries.DonorManagement;
 import java.util.Scanner;
 
 /**

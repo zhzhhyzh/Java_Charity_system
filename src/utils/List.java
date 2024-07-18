@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package charity.utils;
+package utils;
 
 /**
  *
@@ -10,13 +10,22 @@ package charity.utils;
  */
 public interface List<E> extends Collection<E> {
 
-    /*
+        /*
+     * Description  : Search object in list by property
+     * Precondition : List is not empty, object with the property exists
+     * Postcondition: -
+     * Return       : Data with specified property
+     */
+    public Object get(String value, String field);
+
+        /*
      * Description  : Inserts the specified element at the specified position in this list
      * Precondition : -
      * Postcondition: Data is added into the list
      * Return       : -
      */
     public void add(int index, E data);
+
 
     /*
      * Description  : Removes all of the elements from this list
