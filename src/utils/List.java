@@ -8,7 +8,7 @@ package utils;
  *
  * @author quinton
  */
-public interface List<E> extends Collection<E> {
+public interface List<E> extends Collection<E>  {
 
         /*
      * Description  : Search object in list by property

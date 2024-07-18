@@ -4,6 +4,7 @@
  */
 package models;
 
+import java.io.Serializable;
 import utils.LinkedList;
 import java.util.Date;
 
@@ -11,7 +12,7 @@ import java.util.Date;
  *
  * @author quinton
  */
-public class Donor {
+public class Donor implements Serializable{
 
     @Override
     public String toString() {

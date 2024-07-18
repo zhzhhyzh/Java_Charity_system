@@ -5,9 +5,17 @@
 package boundaries;
 
 import charity.*;
+import controls.Common;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import utils.LinkedList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import models.Donor;
 
 /**
@@ -19,8 +27,15 @@ public class DonorManagement {
     private static final LinkedList<Donor> donors = new LinkedList<>();
 
     public static void display() {
+        boolean flag = true;
         Scanner scanner = new Scanner(System.in);
-        while (true) {
+        try {
+            Common.retrieveObjectsFromFile(donors, "donors.dat");
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(DonorManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        while (flag) {
+
             System.out.println("0. Exit");
             System.out.println("1. Add a new donor");
             System.out.println("2. Remove a donor");
@@ -39,7 +54,8 @@ public class DonorManagement {
                     System.out.println("Enter gender: ");
                     char gender = scanner.next().charAt(0);
                     System.out.println("Enter date of birth: ");
-                    Date dob = new Date(Integer.parseInt(scanner.next().split("-")[0]), Integer.parseInt(scanner.next().split("-")[1]), Integer.parseInt(scanner.next().split("-")[2]));
+                    String dateString = scanner.next();
+                    Date dob = new Date(Integer.parseInt(dateString.split("-")[0]), Integer.parseInt(dateString.split("-")[1]), Integer.parseInt(dateString.split("-")[2]));
                     int currentNo = donors.size() + 1;
                     Donor donor = new Donor(Integer.toString(currentNo), name, age, new Date(), gender);
                     donors.add(donor);
@@ -63,7 +79,8 @@ public class DonorManagement {
                     System.out.println("Enter gender: ");
                     char gender2 = scanner.next().charAt(0);
                     System.out.println("Enter date of birth: ");
-                    Date dob2 = new Date(Integer.parseInt(scanner.next().split("-")[0]), Integer.parseInt(scanner.next().split("-")[1]), Integer.parseInt(scanner.next().split("-")[2]));
+                    String dateString2 = scanner.next();
+                    Date dob2 = new Date(Integer.parseInt(dateString2.split("-")[0]), Integer.parseInt(dateString2.split("-")[1]), Integer.parseInt(dateString2.split("-")[2]));
                     Donor donorObjToBeUpdated = new Donor(donorToBeUpdated.getDonorID(), name2, age2, new Date(), gender2);
                     donors.add(donorObjToBeUpdated);
                     break;
@@ -73,13 +90,24 @@ public class DonorManagement {
                     System.out.println(donors.get(idToBeFound, "getDonorID"));
                     break;
                 case "5":
-                    System.out.println("Donors");
-                    int count = 0;
-                    donors.forEach((donorElement)
-                            -> System.out.print(donorElement.getDonorID() + " - " + donorElement.getName())
-                    );
+                    System.out.println("Donors:");
+                for (Donor currentDonor : donors) {
+                    System.out.println(currentDonor.getDonorID() + " - " + currentDonor.getName());
+                }
+
+
+                    
                 case "0":
+                {
+                    try {
+                        Common.writeObjectsToFile(donors, "donors.dat");
+                    } catch (IOException ex) {
+                        Logger.getLogger(DonorManagement.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                    flag = false;
                     break;
+
                 default:
                     System.out.println("Invalid input!");
             }

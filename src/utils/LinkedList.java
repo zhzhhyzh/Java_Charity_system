@@ -4,6 +4,7 @@
  */
 package utils;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -17,7 +18,7 @@ import java.util.logging.Logger;
  * @author quinton
  */
 public class LinkedList<E>
-        implements List<E> {
+        implements List<E>, Serializable{
     
     private int size = 0;
     private Node head;
