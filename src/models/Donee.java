@@ -2,6 +2,9 @@ package models;
 
 import java.util.Calendar;
 import java.util.Date;
+import controls.Common;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 /**
  *
@@ -18,14 +21,32 @@ public class Donee {
     private String phoneNo;
     private String email;
     private char gender;
-    private float receivedAmount;
-    private char financialType; //B - B20, M - M40, T - T20, Z - Bankcrupt
-    private char currentSituation; //
+    private double receivedAmount;
+    private char financialType; //B - B20, M - M40, T - T20
+    private String currentSituation; //
     private Date joinDate;
-    private boolean activeStatus; //true = yes, false - no
+    private char activeStatus; //Y = yes, N - no
 
-    public Donee(String doneeIc, String name, Date dob, String phoneNo, String email, char gender, float receivedAmount, char financialType, char currentSituation, Date joinDate, boolean activeStatus) {
+    public Donee(String doneeIc, String name, Date dob, String phoneNo, String email, char gender, double receivedAmount, char financialType, String currentSituation, char activeStatus) {
         this.doneeId = generateDonneeId();
+        this.doneeIc = doneeIc;
+        this.name = name;
+        this.dob = dob;
+        this.phoneNo = phoneNo;
+        this.email = email;
+        this.gender = gender;
+        this.receivedAmount = receivedAmount;
+        this.financialType = financialType;
+        this.currentSituation = currentSituation;
+        LocalDate localDate = LocalDate.now();
+        this.joinDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        this.activeStatus = activeStatus;
+        this.age = Common.calculateAge(this.dob);
+
+    }
+
+    public Donee(String doneeId, String doneeIc, String name, Date dob, String phoneNo, String email, char gender, double receivedAmount, char financialType, String currentSituation, Date joinDate, char activeStatus) {
+        this.doneeId = doneeId;
         this.doneeIc = doneeIc;
         this.name = name;
         this.dob = dob;
@@ -37,7 +58,7 @@ public class Donee {
         this.currentSituation = currentSituation;
         this.joinDate = joinDate;
         this.activeStatus = activeStatus;
-        calAge(this.dob);
+        this.age = Common.calculateAge(this.dob);
 
     }
 
@@ -97,11 +118,11 @@ public class Donee {
         this.gender = gender;
     }
 
-    public float getReceivedAmount() {
+    public double getReceivedAmount() {
         return receivedAmount;
     }
 
-    public void setReceivedAmount(float receivedAmount) {
+    public void setReceivedAmount(double receivedAmount) {
         this.receivedAmount = receivedAmount;
     }
 
@@ -113,11 +134,11 @@ public class Donee {
         this.financialType = financialType;
     }
 
-    public char getCurrentSituation() {
+    public String getCurrentSituation() {
         return currentSituation;
     }
 
-    public void setCurrentSituation(char currentSituation) {
+    public void setCurrentSituation(String currentSituation) {
         this.currentSituation = currentSituation;
     }
 
@@ -129,11 +150,11 @@ public class Donee {
         this.joinDate = joinDate;
     }
 
-    public boolean isActiveStatus() {
+    public char getActiveStatus() {
         return activeStatus;
     }
 
-    public void setActiveStatus(boolean activeStatus) {
+    public void setActiveStatus(char activeStatus) {
         this.activeStatus = activeStatus;
     }
 
@@ -145,24 +166,8 @@ public class Donee {
         }
     }
 
-    private void calAge(Date birth) {
-        if (birth != null) {
-            Calendar birthCalendar = Calendar.getInstance();
-            birthCalendar.setTime(birth);
-
-            Calendar todayCalendar = Calendar.getInstance();
-            todayCalendar.setTimeInMillis(System.currentTimeMillis());
-
-            int birthYear = birthCalendar.get(Calendar.YEAR);
-            int currentYear = todayCalendar.get(Calendar.YEAR);
-            this.age = currentYear - birthYear;
-
-            // Optional: Handle months and days difference for more precise age
-        } else {
-            this.age = 0;
-        }
+    public String getDoneeId() {
+        return doneeId;
     }
-    
-   
 
 }

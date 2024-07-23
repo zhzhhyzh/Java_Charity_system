@@ -11,12 +11,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import utils.LinkedList;
 
 /**
  *
- * @author quinton
+ * @author quinton, zheheng
  */
 public class Common {
 
@@ -39,4 +45,156 @@ public class Common {
         }
 
     }
+
+    public static boolean ICNoValidator(String icNo) {
+        String regex = "^\\d{2}(0[1-9]|1[0-2])(\\d{2})-\\d{2}-\\d{4}$";
+
+        if (icNo.matches(regex)) {
+
+            return true;
+        } else {
+            System.out.println("The IC No. format is invalid.");
+            System.out.println("Please follow the format (DDMMYY-XX-XXXX)");
+            return false;
+        }
+    }
+
+    public static boolean integerValidator(String number) {
+        try {
+            Integer.parseInt(number);
+            return true;
+        } catch (NumberFormatException e) {
+            System.out.println("This number is invalid.");
+
+            return false;
+        }
+    }
+
+    public static boolean charValidator(String character, char[] charArray) {
+        boolean charArrayFlag;
+        if (charArray.length == 0) {
+            charArrayFlag = true;
+        } else {
+            charArrayFlag = false;
+        }
+        if (character.length() == 1) {
+            for (char compare : charArray) {
+                if (Character.toUpperCase(character.charAt(0)) == compare) {
+                    charArrayFlag = true;
+                    break;
+                }
+            }
+
+            return charArrayFlag;
+        } else {
+            System.out.println("This character is invalid.");
+            return false;
+        }
+
+    }
+
+    public static boolean emailValidator(String email) {
+        String regex = "^\\w+(?:[.-]\\w+)*(\\+[a-zA-Z0-9-]+)?@\\w+(?:[.-]\\w+)*(?:\\.\\w{2,3})+$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        if (matcher.matches()) {
+            return true;
+        } else {
+            System.out.println("The Email format is invalid.");
+            return false;
+        }
+
+    }
+
+    public static boolean dateValidator(String dateString, char constraint) {
+        String regex = "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$";
+        if (dateString.matches(regex)) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate inputDate = LocalDate.parse(dateString, formatter);
+            LocalDate today = LocalDate.now();
+            switch (constraint) {
+                case 'G':
+                    if (inputDate.isAfter(today)) {
+                        return true;
+                    } else {
+                        System.out.println("Date must be after today.");
+                        return false;
+                    }
+                case 'L':
+                    if (inputDate.isBefore(today)) {
+                        return true;
+                    } else {
+                        System.out.println("Date must be before today.");
+                        return false;
+                    }
+
+                case 'M':
+                    if (inputDate.isBefore(today) || inputDate.equals(today)) {
+                        return true;
+                    } else {
+                        System.out.println("Date must be before today or today.");
+                        return false;
+                    }
+
+                case 'H':
+                    if (inputDate.isBefore(today) || inputDate.equals(today)) {
+                        return true;
+                    } else {
+                        System.out.println("Date must be after today or today.");
+                        return false;
+                    }
+
+                default:
+                    return true; // No constraint, return true
+            }
+        } else {
+            System.out.println("Wrong Format of Date.");
+            System.out.println("Should be (yyyy-MM-dd)");
+            return false;
+        }
+
+    }
+
+    public static boolean phoneNoValidator(String phoneNo) {
+        String regex = "^(?:[0-9]?){14}[0-9]$";
+
+        if (phoneNo.matches(regex)) {
+            return true;
+        } else {
+            System.out.println("The Phone No. format is invalid.");
+            System.out.println("Phone No. only allowed up to 14 Digits");
+            return false;
+        }
+    }
+
+    public static boolean doubleValidator(String number) {
+        try {
+            Double.parseDouble(number);
+            return true;
+        } catch (NumberFormatException e) {
+            System.out.println("This number is invalid.");
+
+            return false;
+        }
+    }
+
+    public static double DoubleFormatter(double number) {
+        number = Math.round(number * 100.0) / 100.0;
+        return number;
+    }
+
+    public static int calculateAge(Date birth) {
+
+        Calendar birthCalendar = Calendar.getInstance();
+        birthCalendar.setTime(birth);
+
+        Calendar todayCalendar = Calendar.getInstance();
+        todayCalendar.setTimeInMillis(System.currentTimeMillis());
+
+        int birthYear = birthCalendar.get(Calendar.YEAR);
+        int currentYear = todayCalendar.get(Calendar.YEAR);
+        return (currentYear - birthYear);
+
+    }
+
 }
