@@ -105,8 +105,8 @@ public class DonationManagement {
     public static void amendDonation(){
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter donation ID to be amended: ");
-        String id = scanner.next();
-        Donation donationToBeAmended = (Donation)donations.get(id, "getDonationId");
+        String AmendedId = scanner.next();
+        Donation donationToBeAmended = (Donation)donations.get(AmendedId, "getDonationId");
         if (donationToBeAmended != null) {
             donations.remove(donationToBeAmended);
 
@@ -133,7 +133,7 @@ public class DonationManagement {
             System.out.print("Update remark: ");
             String newRemark = scanner.next();
 
-            Donation updateDonation = new Donation(newDonorId, newEventId, newDonateType, newDonationDate, newRemark);
+            Donation updateDonation = new Donation(AmendedId,newDonorId, newEventId, newDonateType, newDonationDate, newRemark);
             donations.add(updateDonation);
             System.out.println("Update Successfully.");
         }
