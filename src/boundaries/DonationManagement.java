@@ -5,6 +5,8 @@
 package boundaries;
 
 import charity.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import utils.LinkedList;
 import java.util.Scanner;
@@ -17,6 +19,7 @@ import models.Donation;
 public class DonationManagement {
     
     private static final LinkedList<Donation> donations = new LinkedList<>();
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     
     public static void display(){
          Scanner scanner = new Scanner(System.in);
@@ -36,18 +39,19 @@ public class DonationManagement {
                     break;
                     
                 case "2":
-                    
+                    removeDonation();
                     break;
                     
                 case "3":
-                    
+                    amendDonation();
                     break;
                     
                 case "4":
-                    
+                    searchDonation();
                     break;
                     
                 case "5":
+                    listDonation();
                     break;
                     
                     
@@ -68,8 +72,15 @@ public class DonationManagement {
         String eventId = scanner.next();
         System.out.print("donate type(food/cash): ");
         String donateType = scanner.next();
-        System.out.print("Enter donation date: ");
-        Date donationDate = new Date();//Date 
+        System.out.print("Enter donation date (yyyy-MM-dd): ");
+        String dateInput = scanner.next();
+        Date donationDate;
+        try {
+            donationDate = dateFormat.parse(dateInput);
+        } catch (ParseException e) {
+            System.out.println("Invalid date format. Please enter the date in yyyy-MM-dd format.");
+            return;
+        }
         System.out.print("remark: ");
         String remark = scanner.next();
         Donation donation = new Donation(donorId, eventId, donateType, donationDate, remark);
@@ -94,28 +105,35 @@ public class DonationManagement {
     public static void amendDonation(){
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter donation ID to be amended: ");
-        String id = scanner.next();
-        Donation donationToBeAmended = (Donation)donations.get(id, "getDonationId");
+        String AmendedId = scanner.next();
+        Donation donationToBeAmended = (Donation)donations.get(AmendedId, "getDonationId");
         if (donationToBeAmended != null) {
             donations.remove(donationToBeAmended);
 
             //Update donorId
             System.out.print("Update donorID: ");
-            String donorId = scanner.next();
+            String newDonorId = scanner.next();
             //Update eventId
             System.out.print("Update eventID: ");
-            String eventId = scanner.next();
+            String newEventId = scanner.next();
             //Update donote type
             System.out.print("Update donate type(food/cash): ");
-            String donateType = scanner.next();
+            String newDonateType = scanner.next();
             //Update donation date
-            System.out.print("Update donation date: ");
-            Date donationDate = new Date();
+            System.out.print("Update donation date (yyyy-MM-dd): ");
+            String dateInput = scanner.next();
+            Date newDonationDate;
+            try {
+                newDonationDate = dateFormat.parse(dateInput);
+            } catch (ParseException e) {
+                System.out.println("Invalid date format. Please enter the date in yyyy-MM-dd format.");
+                return;
+            }
             //Modify remark
             System.out.print("Update remark: ");
-            String remark = scanner.next();
+            String newRemark = scanner.next();
 
-            Donation updateDonation = new Donation(donorId, eventId, donateType, donationDate, remark);
+            Donation updateDonation = new Donation(AmendedId,newDonorId, newEventId, newDonateType, newDonationDate, newRemark);
             donations.add(updateDonation);
             System.out.println("Update Successfully.");
         }
@@ -138,7 +156,7 @@ public class DonationManagement {
     }
         
     
-    public static void listDonation(Donation[] donations){
+    public static void listDonation(){
         System.out.println("Donation Records: ");
         for (Donation donation: donations) {
             System.out.println(donation.getDonationId() + " - " +
