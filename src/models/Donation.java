@@ -21,7 +21,7 @@ public class Donation {
     // private String picId;
     
 
-    public Donation() {
+    public Donation(String AmendedId, String newDonorId, String newEventId, String newDonateType, Date newDonationDate, String newRemark) {
     }
     
     public Donation(String donorId, String donateType, Date donationDate, String remark, String eventId) {
@@ -31,6 +31,10 @@ public class Donation {
         this.donationDate = new Date();
         this.remark = remark;
         this.eventId = eventId;
+    }
+
+    public Donation(String donorId, String eventId, String donateType, Date donationDate, String remark) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     public String getDonationId() {

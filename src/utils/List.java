@@ -16,7 +16,7 @@ public interface List<E> extends Collection<E>  {
      * Postcondition: -
      * Return       : Data with specified property
      */
-    public Object get(String value, String field);
+    public Object get(String value, String getterMethod);
 
         /*
      * Description  : Inserts the specified element at the specified position in this list
@@ -85,4 +85,12 @@ public interface List<E> extends Collection<E>  {
      * Return       : The number of elements in this list
      */
     public int size();
+    
+      /*
+     * Description  : Arrange list by elements' property in ascending order
+     * Precondition : Property exists
+     * Postcondition: List is arranged by elements' property in ascending order
+     * Return       : 
+     */
+    public void sort(String getterMethod);
 }

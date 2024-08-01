@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import utils.LinkedList;
+import utils.List;
 
 /**
  *
@@ -26,24 +27,30 @@ import utils.LinkedList;
  */
 public class Common {
 
+    final static String folder = "documents/";
     public static void writeObjectsToFile(LinkedList<?> list, String filename) throws FileNotFoundException, IOException {
-        File file = new File(filename);
+        File file = new File(folder +filename);
         ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(file));
-        ooStream.writeObject(list);
+        Object[] newList = list.toArray();
+        ooStream.writeObject(newList);
         ooStream.close();
     }
 
-    public static void retrieveObjectsFromFile(LinkedList<?> list, String filename) throws FileNotFoundException, IOException, ClassNotFoundException {
-        File file = new File("documents/" + filename);
+
+    public static Object retrieveObjectsFromFile(LinkedList<?> list, String filename) throws FileNotFoundException, IOException, ClassNotFoundException {
+        File file = new File(folder + filename);
         if (file.exists() && !file.isDirectory()) {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(file));
-            list = (LinkedList<?>) (oiStream.readObject());
+           
+            Object obj = oiStream.readObject();
             oiStream.close();
+            return obj;
 
         } else {
             file.createNewFile();
+            return null;
         }
-
+       
     }
 
     public static boolean ICNoValidator(String icNo) {

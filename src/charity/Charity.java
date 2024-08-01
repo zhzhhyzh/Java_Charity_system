@@ -30,6 +30,7 @@ public class Charity {
 
             System.out.print("Hi, please enter yout choice:");
             String input = scanner.next();
+            System.out.println("");
             switch (input) {
                 case "1":
                     DonorManagement.display();

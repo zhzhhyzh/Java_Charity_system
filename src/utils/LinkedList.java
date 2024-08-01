@@ -18,16 +18,15 @@ import java.util.logging.Logger;
  * @author quinton
  */
 public class LinkedList<E>
-        implements List<E>, Serializable{
-    
+        implements List<E>, Serializable {
+
     private int size = 0;
     private Node head;
     private Node tail;
-    
+
     @Override
     public void add(int index, E data) {
         checkPositionIndex(index);
-
         /* 
          * The cases:
          * 1. An empty linked list,
@@ -45,25 +44,27 @@ public class LinkedList<E>
             insertMiddle(data, node(index));
         }
     }
-    
-    public Object get(String value, String methodToGetValue){
 
-              for (Node<E> node = head;
+    public Object get(String value, String methodToGetValue) {
+
+        for (Node<E> node = head;
                 node != null;
                 node = node.next) {
 //                                            System.out.println(Arrays.toString(node.data.getClass().getDeclaredFields()));;
 
-                  try {
-                      Method method = node.data.getClass().getDeclaredMethod(methodToGetValue);
-                        String valueFound =  (String) method.invoke(node.data);
-                      if(valueFound.equals(value)) return node.data;
-                  } catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
-                      Logger.getLogger(LinkedList.class.getName()).log(Level.SEVERE, null, ex);
-                  }
+            try {
+                Method method = node.data.getClass().getDeclaredMethod(methodToGetValue);
+                String valueFound = (String) method.invoke(node.data);
+                if (valueFound.equals(value)) {
+                    return node.data;
+                }
+            } catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
+                Logger.getLogger(LinkedList.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        
-       return null;
-    } 
+
+        return null;
+    }
 
     @Override
     public void clear() {
@@ -149,6 +150,44 @@ public class LinkedList<E>
         return true;
     }
 
+    // Function to swap the nodes
+    private void swap(Node ptr1, Node ptr2) {
+        Object tmp = ptr2.data;
+        ptr2.data = ptr1.data;
+        ptr1.data = tmp;
+    }
+
+    public void sort(String getterMethod) {
+        boolean swapped;
+        Node current;
+
+        if (head == null) {
+            return;
+        }
+
+        do {
+            swapped = false;
+            current = head;
+            try {
+
+                Method method = current.data.getClass().getDeclaredMethod(getterMethod);
+
+                while (current.next != null) {
+                    String valueFound = (String) method.invoke(current.data);
+                    String nextValueFound = (String) method.invoke(current.next.data);
+                    if (valueFound.compareTo(nextValueFound) > 0) {
+                        swap(current, current.next);
+                        swapped = true;
+                    }
+                    current = current.next;
+                }
+            } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                Logger.getLogger(LinkedList.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } while (swapped);
+
+    }
+
     @Override
     public Object[] toArray() {
         Object[] array = new Object[size];
@@ -161,7 +200,15 @@ public class LinkedList<E>
         return array;
     }
 
-    private static class Node<E> {
+//    public static LinkedList<?> toLinkedList(Object arr[]) {
+//        LinkedList<Object> ll = new LinkedList<>();
+//        for (Object arr1 : arr) {
+//            ll.add(arr1);
+//        }
+//        
+//    }
+
+    public static class Node<E> {
 
         E data;
         Node<E> next;
@@ -279,9 +326,16 @@ public class LinkedList<E>
     private void removeHead() {
         // Temporary store the head
         Node oldHead = head;
+        if (size == 1) {
+            head = null;
+            tail = null;
+            size--;
+            return;
+        }
 
         // Transfer the head
         head = oldHead.next;
+
         head.prev = null;
 
         // Help garbage collection
@@ -336,16 +390,16 @@ public class LinkedList<E>
                 .append(", tail=")
                 .append(tail)
                 .append("}\n");
-        
+
         sb.append("name, brand, price, stock, model, Processor.getModel(), Graphics.getModel(), memory, storage, display, weight, color\n");
-        
+
         Node<E> node = head;
-        while(node != null) {
+        while (node != null) {
             sb.append(node.data.toString());
             sb.append('\n');
             node = node.next;
         }
-        
+
         return sb.toString();
     }
 
@@ -353,8 +407,9 @@ public class LinkedList<E>
     public Iterator<E> iterator() {
         return new LinkedListIterator();
     }
-    
+
     private class LinkedListIterator implements Iterator<E> {
+
         private Node<E> lastReturned;
         private Node<E> next;
         private int nextIndex;

@@ -3,12 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/NetBeans-20/Projects/Charity/src/models/Donee.java</file>
-            <file>file:/E:/NetBeans-20/Projects/Charity/src/charity/Charity.java</file>
-            <file>file:/E:/NetBeans-20/Projects/Charity/src/models/Donor.java</file>
-            <file>file:/E:/NetBeans-20/Projects/Charity/src/boundaries/DonationManagement.java</file>
-            <file>file:/E:/NetBeans-20/Projects/Charity/src/boundaries/DonorManagement.java</file>
-            <file>file:/E:/NetBeans-20/Projects/Charity/src/models/Donation.java</file>
+            <file>file:/C:/Users/quint/OneDrive/Documents/NetBeansProjects/Charity/src/models/Donee.java</file>
+            <file>file:/C:/Users/quint/OneDrive/Documents/NetBeansProjects/Charity/src/models/Donor.java</file>
+            <file>file:/C:/Users/quint/OneDrive/Documents/NetBeansProjects/Charity/src/utils/LinkedList.java</file>
+            <file>file:/C:/Users/quint/OneDrive/Documents/NetBeansProjects/Charity/src/controls/Common.java</file>
+            <file>file:/C:/Users/quint/OneDrive/Documents/NetBeansProjects/Charity/src/boundaries/DonorManagement.java</file>
+            <file>file:/C:/Users/quint/OneDrive/Documents/NetBeansProjects/Charity/src/charity/Charity.java</file>
+            <file>file:/C:/Users/quint/OneDrive/Documents/NetBeansProjects/Charity/src/models/Donation.java</file>
         </group>
     </open-files>
 </project-private>
