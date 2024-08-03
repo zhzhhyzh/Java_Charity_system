@@ -90,7 +90,7 @@ public class DonorManagement {
                     do {
                         System.out.print("Enter date of birth: ");
                         tempInput = scanner.next();
-                        validation = Common.dateValidator2(tempInput, 'M'
+                        validation = Common.dateValidator(tempInput, 'M'
                         );
                     } while (!validation);
                     String dateString = tempInput;
@@ -151,7 +151,7 @@ public class DonorManagement {
                     do {
                         System.out.print("Enter date of birth: ");
                         tempInput2 = scanner.next();
-                        validation2 = Common.dateValidator2(tempInput2, 'M'
+                        validation2 = Common.dateValidator(tempInput2, 'M'
                         );
                     } while (!validation2);
                     String dateString2 = tempInput2;
