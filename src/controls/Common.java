@@ -269,5 +269,15 @@ public class Common {
         DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         return formatter.format(date);
 
+    
+    public static boolean DonationTypeValidator(String donationType) {
+        if (donationType.equalsIgnoreCase("foods") || 
+                donationType.equalsIgnoreCase("cash") ||
+                donationType.equalsIgnoreCase("supplies")){
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }

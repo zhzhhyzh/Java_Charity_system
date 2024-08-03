@@ -9,7 +9,7 @@ import java.util.Date;
 public class Donation {
     
     
-    private static int counter = 0;
+    private static int counter = 1000;
     private String donationId;
     private String donorId;
     private String eventId;
