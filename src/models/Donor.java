@@ -4,6 +4,7 @@
  */
 package models;
 
+import controls.Common;
 import java.io.Serializable;
 import utils.LinkedList;
 import java.util.Date;
@@ -12,11 +13,12 @@ import java.util.Date;
  *
  * @author quinton
  */
-public class Donor implements Serializable{
+public class Donor implements Serializable {
 
     @Override
     public String toString() {
-        return "Donor{" + "donorID=" + donorID + ", name=" + name + ", age=" + age + ", dob=" + dob + ", gender=" + gender + '}';
+//        return "Donor{" + "donorID=" + donorID + ", name=" + name + ", age=" + age + ", dob=" + dob + ", gender=" + gender + '}';
+        return "Donor:\nDonor ID: " + donorID + "\nName: " + name + "\nAge: " + age + "\nDate of Birth: " + Common.convertDateToString(dob) + "\nGender: " + gender;
     }
 
     public String getDonorID() {
@@ -27,8 +29,7 @@ public class Donor implements Serializable{
         this.donorID = donorID;
     }
 
-    
-    public Donor(String donorID,String name, int age, Date dob, char gender) {
+    public Donor(String donorID, String name, int age, Date dob, char gender) {
         this.donorID = donorID;
         this.name = name;
         this.age = age;
