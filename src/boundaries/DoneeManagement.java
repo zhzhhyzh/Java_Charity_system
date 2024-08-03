@@ -123,7 +123,7 @@ public class DoneeManagement {
         double receivedAmount = Common.DoubleFormatter(Double.parseDouble(tempInput));
 
         do {
-            System.out.print("Enter Financial Type (B - B20, M - M40, T - T20): ");
+            System.out.print("Enter Financial Type (B - B40, M - M40, T - T20): ");
             tempInput = scanner.next();
             validation = Common.charValidator(tempInput, genderTypeCode);
         } while (!validation);

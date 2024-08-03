@@ -204,4 +204,14 @@ public class Common {
 
     }
 
+    
+    public static boolean DonationTypeValidator(String donationType) {
+        if (donationType.equalsIgnoreCase("foods") || 
+                donationType.equalsIgnoreCase("cash") ||
+                donationType.equalsIgnoreCase("supplies")){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
