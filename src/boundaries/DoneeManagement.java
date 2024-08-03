@@ -102,7 +102,7 @@ public class DoneeManagement {
         } while (!validation);
         String doneeIc = tempInput;
         do {
-            System.out.print("Enter date of birth (yyyy-MM-dd): ");
+            System.out.print("Enter date of birth (dd-MM-yyyy): ");
             tempInput = scanner.next();
             validation = Common.dateValidator(tempInput, 'M');
         } while (!validation);
@@ -196,7 +196,7 @@ public class DoneeManagement {
 
                 Date dob = doneeToBeUpdated.getDob();
                 do {
-                    System.out.println("Date of birth (yyyy-MM-dd): " + doneeToBeUpdated.getDob());
+                    System.out.println("Date of birth (dd-MM-yyyy): " + doneeToBeUpdated.getDob());
                     System.out.print("Enter 0 to avoid update");
                     tempInput = scanner.next();
                     if (!tempInput.equals("0")) {
@@ -356,7 +356,7 @@ public class DoneeManagement {
             System.out.println("Donee Id: " + doneeDetail.getDoneeId());
             System.out.println("Name: " + doneeDetail.getName());
             System.out.println("IC No. (DDMMYY-XX-XXXX): " + doneeDetail.getDoneeIc());
-            System.out.println("Date of birth (yyyy-MM-dd): " + Common.convertDateToString(doneeDetail.getDob()));
+            System.out.println("Date of birth (dd-MM-yyyy): " + Common.convertDateToString(doneeDetail.getDob()));
             System.out.println("Age : " + doneeDetail.getAge());
             System.out.println("Phone No. (Up to 14Digits): " + doneeDetail.getPhoneNo());
             System.out.println("Email: " + doneeDetail.getEmail());
@@ -364,7 +364,7 @@ public class DoneeManagement {
             System.out.println("ReceivedAmount: RM" + doneeDetail.getReceivedAmount());
             System.out.println("Financial Type (B - B40, M - M40, T - T20): " + doneeDetail.getFinancialType());
             System.out.println("Current Situation (Remarks): " + doneeDetail.getCurrentSituation());
-            System.out.println("Joined Date (yyyy-MM-dd): " + Common.convertDateToString(doneeDetail.getJoinDate()));
+            System.out.println("Joined Date (dd-MM-yyyy): " + Common.convertDateToString(doneeDetail.getJoinDate()));
             System.out.println("Active Status (Y - Yes, N - No): " + doneeDetail.getActiveStatus());
             do {
                 System.out.println("1. Update donee - " + doneeId);

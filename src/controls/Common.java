@@ -127,9 +127,9 @@ public class Common {
     }
 
     public static boolean dateValidator(String dateString, char constraint) {
-        String regex = "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$";
+        String regex = "^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\\\\d{4}$";
         if (dateString.matches(regex)) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             LocalDate inputDate = LocalDate.parse(dateString, formatter);
             LocalDate today = LocalDate.now();
             switch (constraint) {
@@ -169,7 +169,7 @@ public class Common {
             }
         } else {
             System.out.println("Wrong Format of Date.");
-            System.out.println("Should be (yyyy-MM-dd)");
+            System.out.println("Should be (dd-MM-yyyy)");
             return false;
         }
 
