@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package boundaries;
-
+import java.util.Arrays;
 import charity.*;
 import controls.Common;
 import java.io.IOException;
@@ -22,13 +22,26 @@ public class DoneeManagement {
 
     public static final String divider = "=======================================================";
     private static final LinkedList<Donee> donees = new LinkedList<>();
-    private static final char[] financialTypeCode = {'B', 'M', 't'};
+    private static final char[] financialTypeCode = {'B', 'M', 'T'};
     private static final char[] genderTypeCode = {'M', 'F'};
     private static final char[] yesOrNoTypeCode = {'Y', 'N'};
     private static final char[] selectionTypeCode1 = {'0','1','2'};  
 
 
     public static void display() {
+         try {
+            Object[] objArr = (Object[]) (Common.retrieveObjectsFromFile(donees, "donees.dat"));
+
+            if (objArr != null) {
+                Donee[] doneesArr = Arrays.copyOf(objArr, objArr.length, Donee[].class);
+
+                for (Donee donee: doneesArr) {
+                    donees.add(donee);
+                }
+            }
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(DoneeManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
         Scanner scanner = new Scanner(System.in);
         boolean indicateFlag = true;
         while (indicateFlag) {
@@ -36,9 +49,9 @@ public class DoneeManagement {
 
             System.out.println("Donee Management");
             System.out.println(divider + "\n");
-            System.out.println("1. Add a new donor");
-            System.out.println("2. Search donor details");
-            System.out.println("3. List all donors");
+            System.out.println("1. Add a new donee");
+            System.out.println("2. Search donee details");
+            System.out.println("3. List all donees");
             System.out.println("4. List by Criteria");
             System.out.println("0. Exit");
 
@@ -50,10 +63,10 @@ public class DoneeManagement {
                     create();
                     break;
                 case "2":
-                    System.out.println("Enter donor ID to proceed (0 for cancel): ");
-                    String donorIdInput = scanner.next();
-                    if (!"0".equals(donorIdInput)) {
-                        detail(donorIdInput);
+                    System.out.println("Enter donee ID to proceed (0 for cancel): ");
+                    String doneeIdInput = scanner.next();
+                    if (!"0".equals(doneeIdInput)) {
+                        detail(doneeIdInput);
                     }
                     break;
                 case "3":
@@ -123,9 +136,9 @@ public class DoneeManagement {
         double receivedAmount = Common.DoubleFormatter(Double.parseDouble(tempInput));
 
         do {
-            System.out.print("Enter Financial Type (B - B20, M - M40, T - T20): ");
+            System.out.print("Enter Financial Type (B - B40, M - M40, T - T20): ");
             tempInput = scanner.next();
-            validation = Common.charValidator(tempInput, genderTypeCode);
+            validation = Common.charValidator(tempInput, financialTypeCode);
         } while (!validation);
         char financialType = Character.toUpperCase(tempInput.charAt(0));
 
@@ -136,7 +149,7 @@ public class DoneeManagement {
         int currentNo = donees.size() + 1;
         Donee donee = new Donee(doneeIc, name, dob, phoneNo, email, gender, receivedAmount, financialType, currentSituation, activeStatus);
         donees.add(donee);
-        System.out.println("Record Created");
+        System.out.println("Record Created: " + donee.getDoneeId());
     }
 
     public static void update(String doneeId) {
@@ -168,7 +181,7 @@ public class DoneeManagement {
                 }
                 String doneeIc = doneeToBeUpdated.getDoneeIc();
                 do {
-                    System.out.println("IC No. (DDMMYY-XX-XXXX): " + doneeToBeUpdated.getDoneeIc());
+                    System.out.println("IC No. (YYMMDD-XX-XXXX): " + doneeToBeUpdated.getDoneeIc());
                     System.out.print("Enter 0 to avoid update");
                     tempInput = scanner.next();
                     if (!tempInput.equals("0")) {
@@ -258,7 +271,7 @@ public class DoneeManagement {
 
                 char financialType = doneeToBeUpdated.getFinancialType();
                 do {
-                    System.out.println("Financial Type (B - B20, M - M40, T - T20): " + doneeToBeUpdated.getFinancialType());
+                    System.out.println("Financial Type (B - B40, M - M40, T - T20): " + doneeToBeUpdated.getFinancialType());
                     System.out.print("Enter 0 to avoid update");
                     tempInput = scanner.next();
                     if (tempInput.equals("0")) {
@@ -335,26 +348,27 @@ public class DoneeManagement {
         System.out.println(divider);
         System.out.println("Donee (Detail)");
         System.out.println(divider + "\n");
-        Donee doneeDetail = (Donee) donees.get(doneeId, "getDoneeID");
+        Donee doneeDetail = (Donee) donees.get(doneeId, "getDoneeId");          
+                   
         if (doneeDetail == null) {
             System.out.println("Donee Id - " + doneeId + " Not found");
         } else {
             System.out.println("Donee Id: " + doneeDetail.getDoneeId());
             System.out.println("Name: " + doneeDetail.getName());
             System.out.println("IC No. (DDMMYY-XX-XXXX): " + doneeDetail.getDoneeIc());
-            System.out.println("Date of birth (yyyy-MM-dd): " + doneeDetail.getDob());
+            System.out.println("Date of birth (yyyy-MM-dd): " + Common.convertDateToString(doneeDetail.getDob()));
             System.out.println("Age : " + doneeDetail.getAge());
             System.out.println("Phone No. (Up to 14Digits): " + doneeDetail.getPhoneNo());
             System.out.println("Email: " + doneeDetail.getEmail());
             System.out.println("Gender (M - Male, F - Female): " + doneeDetail.getGender());
             System.out.println("ReceivedAmount: RM" + doneeDetail.getReceivedAmount());
-            System.out.println("Financial Type (B - B20, M - M40, T - T20): " + doneeDetail.getFinancialType());
+            System.out.println("Financial Type (B - B40, M - M40, T - T20): " + doneeDetail.getFinancialType());
             System.out.println("Current Situation (Remarks): " + doneeDetail.getCurrentSituation());
-            System.out.println("Joined Date (yyyy-MM-dd): " + doneeDetail.getJoinDate());
+            System.out.println("Joined Date (yyyy-MM-dd): " + Common.convertDateToString(doneeDetail.getJoinDate()));
             System.out.println("Active Status (Y - Yes, N - No): " + doneeDetail.getActiveStatus());
             do {
-                System.out.println("1. Update donor - " + doneeId);
-                System.out.println("2. Delete donor - " + doneeId);
+                System.out.println("1. Update donee - " + doneeId);
+                System.out.println("2. Delete donee - " + doneeId);
                 System.out.println("0. Back");
                 System.out.print("Enter your choices: ");
                 String tempInput = scanner.next();

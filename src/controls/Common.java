@@ -89,18 +89,20 @@ public class Common {
     }
 
     public static boolean charValidator(String character, char[] charArray) {
-        boolean charArrayFlag;
-        if (charArray.length == 0) {
-            charArrayFlag = true;
-        } else {
-            charArrayFlag = false;
-        }
+        boolean charArrayFlag = false;
         if (character.length() == 1) {
             for (char compare : charArray) {
                 if (Character.toUpperCase(character.charAt(0)) == compare) {
                     charArrayFlag = true;
                     break;
                 }
+            }
+            if(charArrayFlag == false){
+                System.out.print("Character is invalid:\nPlease input either ");
+                for(char word: charArray){
+                    System.out.print("[" + word + "] ");
+                }
+                System.out.print("\n");
             }
 
             return charArrayFlag;
