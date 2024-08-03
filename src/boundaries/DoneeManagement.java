@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package boundaries;
-
+import java.util.Arrays;
 import charity.*;
 import controls.Common;
 import java.io.IOException;
@@ -29,6 +29,19 @@ public class DoneeManagement {
 
 
     public static void display() {
+         try {
+            Object[] objArr = (Object[]) (Common.retrieveObjectsFromFile(donees, "donees.dat"));
+
+            if (objArr != null) {
+                Donee[] doneesArr = Arrays.copyOf(objArr, objArr.length, Donee[].class);
+
+                for (Donee donee: doneesArr) {
+                    donees.add(donee);
+                }
+            }
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(DoneeManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
         Scanner scanner = new Scanner(System.in);
         boolean indicateFlag = true;
         while (indicateFlag) {
@@ -335,7 +348,8 @@ public class DoneeManagement {
         System.out.println(divider);
         System.out.println("Donee (Detail)");
         System.out.println(divider + "\n");
-        Donee doneeDetail = (Donee) donees.get(doneeId, "getDoneeID");
+        Donee doneeDetail = (Donee) donees.get(doneeId, "getDoneeId");          
+                   
         if (doneeDetail == null) {
             System.out.println("Donee Id - " + doneeId + " Not found");
         } else {
