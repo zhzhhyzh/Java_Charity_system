@@ -97,9 +97,9 @@ public class Common {
                     break;
                 }
             }
-            if(charArrayFlag == false){
+            if (charArrayFlag == false) {
                 System.out.print("Character is invalid:\nPlease input either ");
-                for(char word: charArray){
+                for (char word : charArray) {
                     System.out.print("[" + word + "] ");
                 }
                 System.out.print("\n");
@@ -174,54 +174,6 @@ public class Common {
         }
 
     }
-    public static boolean dateValidator2(String dateString, char constraint) {
-        String regex = "^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\\d{4}$";
-        if (dateString.matches(regex)) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            LocalDate inputDate = LocalDate.parse(dateString, formatter);
-            LocalDate today = LocalDate.now();
-            switch (constraint) {
-                case 'G':
-                    if (inputDate.isAfter(today)) {
-                        return true;
-                    } else {
-                        System.out.println("Date must be after today.");
-                        return false;
-                    }
-                case 'L':
-                    if (inputDate.isBefore(today)) {
-                        return true;
-                    } else {
-                        System.out.println("Date must be before today.");
-                        return false;
-                    }
-
-                case 'M':
-                    if (inputDate.isBefore(today) || inputDate.equals(today)) {
-                        return true;
-                    } else {
-                        System.out.println("Date must be before today or today.");
-                        return false;
-                    }
-
-                case 'H':
-                    if (inputDate.isBefore(today) || inputDate.equals(today)) {
-                        return true;
-                    } else {
-                        System.out.println("Date must be after today or today.");
-                        return false;
-                    }
-
-                default:
-                    return true; // No constraint, return true
-            }
-        } else {
-            System.out.println("Wrong Format of Date.");
-            System.out.println("Should be (dddd-MM-yyyy)");
-            return false;
-        }
-
-    }
 
     public static boolean phoneNoValidator(String phoneNo) {
         String regex = "^(?:[0-9]?){14}[0-9]$";
@@ -264,20 +216,10 @@ public class Common {
         return (currentYear - birthYear);
 
     }
-    
-    public static String convertDateToString(Date date){
+
+    public static String convertDateToString(Date date) {
         DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         return formatter.format(date);
-
-    
-    public static boolean DonationTypeValidator(String donationType) {
-        if (donationType.equalsIgnoreCase("foods") || 
-                donationType.equalsIgnoreCase("cash") ||
-                donationType.equalsIgnoreCase("supplies")){
-            return true;
-        } else {
-            return false;
-        }
 
     }
 }
