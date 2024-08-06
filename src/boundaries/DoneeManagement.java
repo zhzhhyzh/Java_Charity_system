@@ -131,7 +131,6 @@ public class DoneeManagement {
                     System.out.println("");
 
                     indicateFlag = false;
-
                     break;
                 default:
                     System.out.println("Invalid input!");
