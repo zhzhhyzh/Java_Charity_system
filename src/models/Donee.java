@@ -5,14 +5,13 @@ import java.util.Date;
 import controls.Common;
 import java.time.LocalDate;
 import java.time.ZoneId;
-
+import java.io.Serializable;
 /**
  *
  * @author Zhe Heng
  */
-public class Donee {
+public class Donee implements Serializable{
 
-    private static int doneeIdCounter = 1001; // Starts from 1001
     private String doneeId;
     private String doneeIc;
     private String name;
@@ -27,8 +26,8 @@ public class Donee {
     private Date joinDate;
     private char activeStatus; //Y = yes, N - no
 
-    public Donee(String doneeIc, String name, Date dob, String phoneNo, String email, char gender, double receivedAmount, char financialType, String currentSituation, char activeStatus) {
-        this.doneeId = generateDonneeId();
+    public Donee(String doneeId,String doneeIc, String name, Date dob, String phoneNo, String email, char gender, double receivedAmount, char financialType, String currentSituation, char activeStatus) {
+        this.doneeId = doneeId;
         this.doneeIc = doneeIc;
         this.name = name;
         this.dob = dob;
@@ -158,13 +157,7 @@ public class Donee {
         this.activeStatus = activeStatus;
     }
 
-    private String generateDonneeId() {
-        synchronized (this) { // Thread safety for counter update
-            String id = "AAA" + doneeIdCounter;
-            doneeIdCounter++;
-            return id;
-        }
-    }
+    
 
     public String getDoneeId() {
         return doneeId;

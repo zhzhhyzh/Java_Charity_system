@@ -14,6 +14,7 @@ import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,25 +31,32 @@ import utils.List;
 public class Common {
 
     final static String folder = "documents/";
-    public static final char[] GENDER_TYPE_CODE = {'M', 'F'};
+    public static final char[] GENDER_TYPE_CODE = { 'M', 'F' };
 
-    public static void writeObjectsToFile(LinkedList<?> list, String filename) throws FileNotFoundException, IOException {
+    public static void writeObjectsToFile(LinkedList<?> list, String filename) throws IOException {
         File file = new File(folder + filename);
-        ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(file));
-        Object[] newList = list.toArray();
-        ooStream.writeObject(newList);
-        ooStream.close();
+        try (ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(file))) {
+            Object[] newList = list.toArray();
+            ooStream.writeObject(newList);
+            ooStream.close();
+        } catch (IOException e) {
+            // Handle the exception appropriately, e.g., log the error or throw a custom
+            // exception
+            System.err.println("Error writing objects to file: " + e.getMessage());
+        }
     }
 
-    public static void writeObjectsToFile(ArrayList<?> list, String filename) throws FileNotFoundException, IOException {
+    public static void writeObjectsToFile(ArrayList<?> list, String filename)
+            throws FileNotFoundException, IOException {
         File file = new File(folder + filename);
         ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(file));
-//        Object[] newList = list.toArray();
+        // Object[] newList = list.toArray();
         ooStream.writeObject(list);
         ooStream.close();
     }
 
-    public static Object retrieveObjectsFromFile(LinkedList<?> list, String filename) throws FileNotFoundException, IOException, ClassNotFoundException {
+    public static Object retrieveObjectsFromFile(LinkedList<?> list, String filename)
+            throws FileNotFoundException, IOException, ClassNotFoundException {
         File file = new File(folder + filename);
         if (file.exists() && !file.isDirectory()) {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(file));
@@ -222,4 +230,27 @@ public class Common {
         return formatter.format(date);
 
     }
+
+    public static Date structureForDateParsing(String dateInput) {
+        // String dateInput is in yy-MM-dddd
+        LocalDate localDate = LocalDate.of(
+                Integer.parseInt(dateInput.split("-")[2]), Integer.parseInt(dateInput.split("-")[1]),
+                Integer.parseInt(dateInput.split("-")[0]));
+        Date wantedDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return wantedDate;
+    }
+
+    public static boolean requiredField(String input){
+        if(input == null || input == "" || input.isEmpty()){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
 }
+
