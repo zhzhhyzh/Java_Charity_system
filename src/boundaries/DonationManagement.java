@@ -6,6 +6,9 @@ package boundaries;
 
 import charity.*;
 import controls.Common;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,12 +23,15 @@ import models.Donation;
 public class DonationManagement {
     public static final String divider = "=======================================================";
     private static final char[] yesOrNoTypeCode = {'Y', 'N'};
+    private static final char[] DonationTypeCode = {'F', 'C','S'};
     private static final LinkedList<Donation> donations = new LinkedList<>();
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
     
     public static void display(){
          Scanner scanner = new Scanner(System.in);
-        while (true) {
+         boolean indicateFlag = true;
+        while (indicateFlag) {
+            System.out.println("\n" + divider);
             System.out.println("Donation Management");
             System.out.println(divider + "\n");
             System.out.println("1. Add a new donation");
@@ -60,6 +66,15 @@ public class DonationManagement {
                     break;
                     
                 case "0":
+                   donations.sort("getDoneeId");
+                    try {
+
+                        Common.writeObjectsToFile(donations, "donees.dat");
+                    } catch (IOException ex) {
+                        Logger.getLogger(DonationManagement.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    System.out.println("");
+                    indicateFlag = false;
                     break;
                     
                 default:
@@ -80,14 +95,14 @@ public class DonationManagement {
         
         boolean validation = false; 
         do {
-            System.out.print("donate type(foods/cash/supplies): ");
+            System.out.print("donate type(F-foods, C-cash, S-supplies): ");
             tempInput = scanner.next();
-            validation = Common.DonationTypeValidator(tempInput);
+            validation = Common.charValidator(tempInput,DonationTypeCode);
         } while (!validation);
         String donateType = tempInput;
         
         do {
-            System.out.print("Enter donation date (yyyy-MM-dd): ");
+            System.out.print("Enter donation date (dd-MM-yyyy: ");
             tempInput = scanner.next();
             validation = Common.dateValidator(tempInput, 'M');
         } while (!validation);
@@ -120,6 +135,7 @@ public class DonationManagement {
                         System.out.println("Donation removed successfully.");
                     }
                     else {
+                        System.out.println("Canceled.");
                         break;
                     }
                 }
@@ -135,39 +151,45 @@ public class DonationManagement {
     
     public static void amendDonation(){
         Scanner scanner = new Scanner(System.in);
+        String tempInput;
         boolean validation = false;
         do {
             System.out.print("Enter donation ID to be amended (0 for cancel): ");
             String idInput = scanner.next();
             if (!"0".equals(idInput)){
-                Donation donationToBeAmended = (Donation)donations.get(AmendedId, "getDonationId");
+                Donation donationToBeAmended = (Donation)donations.get(idInput, "getDonationId");
                 if (donationToBeAmended != null) {
                     donations.remove(donationToBeAmended);
 
                     //Update donorId
                     System.out.print("Update donorID: ");
                     String newDonorId = scanner.next();
+                    
                     //Update eventId
                     System.out.print("Update eventID: ");
                     String newEventId = scanner.next();
+                    
                     //Update donote type
-                    System.out.print("Update donate type(food/cash): ");
-                    String newDonateType = scanner.next();
+                    do {
+                        System.out.print("Update donate type(F-foods, C-cash, S-supplies): ");
+                        tempInput = scanner.next();
+                        validation = Common.charValidator(tempInput,DonationTypeCode);
+                    } while (!validation);
+                    String newDonateType = tempInput;
+                    
                     //Update donation date
-                    System.out.print("Update donation date (yyyy-MM-dd): ");
-                    String dateInput = scanner.next();
-                    Date newDonationDate;
-                    try {
-                        newDonationDate = dateFormat.parse(dateInput);
-                    } catch (ParseException e) {
-                        System.out.println("Invalid date format. Please enter the date in yyyy-MM-dd format.");
-                        return;
-                    }
+                    do {
+                        System.out.print("Update donation date (dd-MM-yyyy: ");
+                        tempInput = scanner.next();
+                        validation = Common.dateValidator(tempInput, 'M');
+                    } while (!validation);
+                    Date newDonationDate = new Date(Integer.parseInt(tempInput.split("-")[0]), Integer.parseInt(tempInput.split("-")[1]), Integer.parseInt(tempInput.split("-")[2]));
+ 
                     //Modify remark
                     System.out.print("Update remark: ");
                     String newRemark = scanner.next();
 
-                    Donation updateDonation = new Donation(AmendedId,newDonorId, newEventId, newDonateType, newDonationDate, newRemark);
+                    Donation updateDonation = new Donation(idInput,newDonorId, newEventId, newDonateType, newDonationDate, newRemark);
                     donations.add(updateDonation);
                     System.out.println("Update Successfully.");
                 }
