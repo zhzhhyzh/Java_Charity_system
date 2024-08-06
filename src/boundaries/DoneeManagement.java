@@ -570,7 +570,7 @@ public class DoneeManagement {
                     running = false;
                     break;
                 case "4":
-                    // generate(filteredDonees);
+                    generate(filteredDonees);
                     break;
                 case "0":
                     running = false;
@@ -584,5 +584,54 @@ public class DoneeManagement {
         // scanner.close();
         return input;
     }
+
+    public static void generate(LinkedList<Donee> filteredDonees) {
+        String baseDownloadPath = System.getProperty("user.home") + "/Downloads/donee_list.txt";
+        int fileCount = 1;
+        String downloadPath = baseDownloadPath;
+
+        while (new File(downloadPath).exists()) {
+            downloadPath = baseDownloadPath + "(" + fileCount++ + ").txt";
+        }
+        try (FileWriter writer = new FileWriter(new File(downloadPath))) {
+            writer.write("DONEE NAME LIST\nTotal Donees: " + filteredDonees.size() + "\n");
+            writer.write("-----------------------------------------------------------\n");
+            writer.write("Donee       | Age  | Active Status   | Financial Type\n");
+            writer.write("-----------------------------------------------------------\n");
+            for (Donee donee : filteredDonees) {
+                String tempActiveStatus = " - ";
+                switch (donee.getActiveStatus()) {
+                    case 'Y':
+                        tempActiveStatus = "Yes";
+                        break;
+                    case 'N':
+                        tempActiveStatus = "No";
+                        break;
+                }
+
+                String tempFinancial = " - ";
+                switch (donee.getFinancialType()) {
+                    case 'B':
+                        tempFinancial = "B40";
+                        break;
+                    case 'M':
+                        tempFinancial = "M40";
+                        break;
+                    case 'T':
+                        tempFinancial = "T20";
+                        break;
+                }
+
+                String doneeField = donee.getDoneeId() + "-" + donee.getName();
+
+                writer.write(String.format("%-10s | %-5d | %-15s | %-15s%n",
+                        doneeField, donee.getAge(), tempActiveStatus, tempFinancial));
+            }
+            System.out.println("File successfully saved to " + downloadPath);
+        } catch (IOException e) {
+            System.err.println("An error occurred while writing the file: " + e.getMessage());
+        }
+    }
+
 
 }
