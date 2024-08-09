@@ -4,36 +4,28 @@
  */
 package models;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Donation {
+public class Donation implements Serializable {
     
     
-    private static int counter = 1000;
+
     private String donationId;
     private String donorId;
+    private String doneeId;
     private String eventId;
-    private String donateType;
+    private char donateType;  //F-foods, C-cash, S-supplies
     private Date donationDate;
     private String remark;
-    // accumulateValue
-    // itemCount
-    // private String picId;
+
     
 
-    public Donation(String AmendedId, String newDonorId, String newEventId, String newDonateType, Date newDonationDate, String newRemark) {
-        this.donationId = AmendedId;
-        this.donorId = newDonorId;
-        this.eventId = newEventId;
-        this.donateType = newDonateType;
-        this.donationDate = newDonationDate;
-        this.remark = newRemark;
-    }
-    
 
-    public Donation(String donorId, String eventId, String donateType, Date donationDate, String remark) {
-        this.donationId = generateDonationId();
+        public Donation(String donationId, String donorId, String doneeId, String eventId, char donateType, Date donationDate, String remark) {
+        this.donationId = donationId;
         this.donorId = donorId;
+        this.doneeId = doneeId;
         this.eventId = eventId;
         this.donateType = donateType;
         this.donationDate = donationDate;
@@ -44,9 +36,6 @@ public class Donation {
         return donationId;
     }
 
-    public void setDonationId(String donationId) {
-        this.donationId = donationId;
-    }
 
     public String getDonorId() {
         return donorId;
@@ -56,11 +45,19 @@ public class Donation {
         this.donorId = donorId;
     }
 
-    public String getDonateType() {
+    public String getDoneeId() {
+        return doneeId;
+    }
+
+    public void setDoneeId(String doneeId) {
+        this.doneeId = doneeId;
+    }
+
+    public char getDonateType() {
         return donateType;
     }
 
-    public void setDonateType(String donateType) {
+    public void setDonateType(char donateType) {
         this.donateType = donateType;
     }
 
@@ -88,21 +85,4 @@ public class Donation {
         this.eventId = eventId;
     }
     
-    
-    public static String generateDonationId() {
-        String id = "DDD" + ++counter;
-        return id;
-    }
-    
-    @Override
-    public String toString(){
-        return "Donation{" +
-                "donationID=" + donationId +
-                "donorID=" + donorId + 
-                "eventId" + eventId +
-                "donateType=" + donateType +
-                "donationDate=" + donationDate + 
-                "remark" + remark +
-                "}";
-    }
 }
