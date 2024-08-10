@@ -135,7 +135,13 @@ public class Common {
     }
 
     public static boolean dateValidator(String dateString, char constraint) {
-        String regex = "^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\\d{4}$";
+        String regex = "^(0[1-9]|1[0-9]|2[0-8])-(0[1-9]|1[0-2])-\\d{4}$\r\n" + //
+                "|^(0[1-9]|1[0-9]|2[0-9])-(02)-(0[1-9]|1[0-9]|2[0-8])-\\d{4}$\r\n" + //
+                "|^(0[1-9]|1[0-9]|2[0-9])-(02)-(29)-((0[48])|(1[2468][048])|(2[048])|(3[26])|(4[0])|(5[26])|(6[0])|(7[26])|(8[0])|(9[26]))$\r\n"
+                + //
+                "|^(30)-(04|06|09|11)-\\d{4}$\r\n" + //
+                "|^(31)-(01|03|05|07|08|10|12)-\\d{4}$\r\n" + //
+                "";
         if (dateString.matches(regex)) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             LocalDate inputDate = LocalDate.parse(dateString, formatter);
@@ -240,8 +246,8 @@ public class Common {
         return wantedDate;
     }
 
-    public static boolean requiredField(String input){
-        if(input == null || input == "" || input.isEmpty()){
+    public static boolean requiredField(String input) {
+        if (input == null || input == "" || input.isEmpty()) {
             return false;
         } else {
             return true;
@@ -253,4 +259,3 @@ public class Common {
         System.out.flush();
     }
 }
-
