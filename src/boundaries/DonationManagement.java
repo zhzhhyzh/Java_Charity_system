@@ -4,20 +4,17 @@
  */
 package boundaries;
 
-import charity.*;
 import controls.Common;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import utils.LinkedList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import models.Donation;
 import models.Donee;
 import models.Donor;
+import utils.LinkedList;
 
 /**
  *
@@ -31,46 +28,67 @@ public class DonationManagement {
     private static final LinkedList<Donor> donors = new LinkedList<>();
     private static final LinkedList<Donee> donees = new LinkedList<>();
     
+    
+    private static <T> void loadData(String fileName, LinkedList<T> list, Class<T[]> type) {
+        try {
+            Object[] objArr = (Object[]) Common.retrieveObjectsFromFile(list, fileName);
+            if (objArr != null) {
+                T[] arr = Arrays.copyOf(objArr, objArr.length, type);
+                for (T obj : arr) {
+                    list.add(obj);
+                }
+            }
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(DonationManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public static void display(){
-        try {
-            Object[] objArr = (Object[]) (Common.retrieveObjectsFromFile(donations, "donations.dat"));
+        
+        loadData("donations.dat", donations, Donation[].class);
+        loadData("donors.dat", donors, Donor[].class);
+        loadData("donees.dat", donees, Donee[].class);
+//        try {
+//            Object[] objArr = (Object[]) (Common.retrieveObjectsFromFile(donations, "donations.dat"));
+//
+//            if (objArr != null) {
+//                Donation[] donationsArr = Arrays.copyOf(objArr, objArr.length, Donation[].class);
+//
+//                for (Donation donation : donationsArr) {
+//                    donations.add(donation);
+//                }
+//            }
+//        } catch (IOException | ClassNotFoundException ex) {
+//            Logger.getLogger(DoneeManagement.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        try {
+//            Object[] objArr = (Object[]) (Common.retrieveObjectsFromFile(donors, "donors.dat"));
+//
+//            if (objArr != null) {
+//                Donor[] donorsArr = Arrays.copyOf(objArr, objArr.length, Donor[].class);
+//
+//                for (Donor donor : donorsArr) {
+//                    donors.add(donor);
+//                }
+//            }
+//        } catch (IOException | ClassNotFoundException ex) {
+//            Logger.getLogger(DoneeManagement.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        try {
+//            Object[] objArr = (Object[]) (Common.retrieveObjectsFromFile(donees, "donees.dat"));
+//
+//            if (objArr != null) {
+//                Donee[] doneesArr = Arrays.copyOf(objArr, objArr.length, Donee[].class);
+//
+//                for (Donee donee : doneesArr) {
+//                    donees.add(donee);
+//                }
+//            }
+//        } catch (IOException | ClassNotFoundException ex) {
+//            Logger.getLogger(DoneeManagement.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
-            if (objArr != null) {
-                Donation[] donationsArr = Arrays.copyOf(objArr, objArr.length, Donation[].class);
 
-                for (Donation donation : donationsArr) {
-                    donations.add(donation);
-                }
-            }
-        } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(DoneeManagement.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            Object[] objArr = (Object[]) (Common.retrieveObjectsFromFile(donors, "donors.dat"));
-
-            if (objArr != null) {
-                Donor[] donorsArr = Arrays.copyOf(objArr, objArr.length, Donor[].class);
-
-                for (Donor donor : donorsArr) {
-                    donors.add(donor);
-                }
-            }
-        } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(DoneeManagement.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            Object[] objArr = (Object[]) (Common.retrieveObjectsFromFile(donees, "donees.dat"));
-
-            if (objArr != null) {
-                Donee[] doneesArr = Arrays.copyOf(objArr, objArr.length, Donee[].class);
-
-                for (Donee donee : doneesArr) {
-                    donees.add(donee);
-                }
-            }
-        } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(DoneeManagement.class.getName()).log(Level.SEVERE, null, ex);
-        }
          Scanner scanner = new Scanner(System.in);
          boolean indicateFlag = true;
         while (indicateFlag) {
@@ -124,24 +142,17 @@ public class DonationManagement {
                     break;
                     
                 case "0":
-                   donations.sort("getDonationId");
+                    donations.sort("getDonationId");
+                    listDonation();
                     try {
                         Common.writeObjectsToFile(donations, "donations.dat");
+                        Common.writeObjectsToFile(donors, "donors.dat");
+                        Common.writeObjectsToFile(donees, "donees.dat");
                     } catch (IOException ex) {
                         Logger.getLogger(DonationManagement.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    try {
-                        Common.writeObjectsToFile(donors, "donors.dat");
-                    } catch (IOException ex) {
-                        Logger.getLogger(DonorManagement.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    try {
-                        Common.writeObjectsToFile(donees, "donees.dat");
-                    } catch (IOException ex) {
-                        Logger.getLogger(DoneeManagement.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    System.out.println("");
                     indicateFlag = false;
+                    listDonation();
                     break;
                     
                 default:
@@ -161,6 +172,8 @@ public class DonationManagement {
             Donor donorDetail = (Donor) donors.get(tempInput, "getDonorID");
             if (donorDetail != null) {
                 validation = true;
+            } else if (tempInput.equals("0")){
+                break;
             } else {
                 System.out.println("This donor ID does not exist.");
             }
@@ -173,6 +186,8 @@ public class DonationManagement {
             Donee doneeDetail = (Donee) donees.get(tempInput, "getDoneeId");
             if (doneeDetail != null) {
                 validation = true;
+            } else if (tempInput.equals("0")){
+                break;
             } else {
                 System.out.println("This donee ID does not exist.");
                 validation = false;
@@ -207,16 +222,27 @@ public class DonationManagement {
         scanner.nextLine();
         String remark = scanner.nextLine();
         
-        int tempDonationId = 1001;
-        String donationId = "";
-        for (int i = 1001 ; i == tempDonationId ; i++){
-            Donation donationDetail = (Donation)donations.get(Integer.toString(i),"getDonationId");
-            if (donationDetail != null) {
-                tempDonationId++;
-            } else {
-                donationId = Integer.toString(i);
+        int currentId = 1000;
+        for (Donation donation : donations) {
+            String donationId = donation.getDonationId();
+
+            // Skip empty or null records
+            if (donationId == null || donationId.isEmpty()) {
+                continue;
+            }
+            // Extract the numeric part of the donation ID by removing the "D" prefix
+            int donationNumericId = Integer.parseInt(donation.getDonationId().substring(1));
+            // Update currentId if this donation ID is greater than the currentId
+            if (donationNumericId > currentId) {
+                currentId = donationNumericId;
             }
         }
+        currentId++;
+        String donationId = "D" + currentId;
+        
+        
+            
+        
         int currentNo = donations.size() + 1;
         Donation donation = new Donation(donationId, donorId, doneeId, eventId, donateType, donationDate, remark);
         donations.add(donation);
@@ -326,10 +352,12 @@ public class DonationManagement {
     
     public static void searchDonation(String idInput){
         Donation donationToBeSearched = (Donation)donations.get(idInput,"getDonationId");
+        Donor donor = (Donor) donors.get(donationToBeSearched.getDonorId(),"getDonorID");
+        Donee donee = (Donee) donees.get(donationToBeSearched.getDoneeId(),"getDoneeId");
         if (donationToBeSearched != null) {
             System.out.println("Donation ID: " + donationToBeSearched.getDonationId() + "\n" +
-                                "Donor: " + donationToBeSearched.getDonorId() + "\n" +
-                                "Donee: " + donationToBeSearched.getDoneeId() + "\n" +
+                                "Donor: " + donationToBeSearched.getDonorId() + " - " + donor.getName() + "\n" +
+                                "Donee: " + donationToBeSearched.getDoneeId() + " - " + donee.getName() + "\n" +
                                 "Event: " + donationToBeSearched.getEventId() + "\n" +
                                 "Donation Type: " + donationToBeSearched.getDonateType() + "\n" +
                                 "Donation Date: " + Common.convertDateToString(donationToBeSearched.getDonationDate()) + "\n" +
@@ -346,6 +374,7 @@ public class DonationManagement {
         for (Donation donation: donations) {
             String donorName = "";
             String doneeName = "";
+            //String eventName = "";
             
             String tempType = "-";
             switch (donation.getDonateType()) {
@@ -373,12 +402,19 @@ public class DonationManagement {
                     break;
                 }
             }
+
+            // for (Event event:events){
+            //     if (event.getEventId().equals(donation.getEventId())){
+            //         eventName = event.getEventName();
+            //         break;
+            //     }
+            //}
             
             System.out.println(donation.getDonationId() + " - " +
-                                donorName + " - " +  //should read donor name by donor id
+                                donorName + " - " +  
                                 doneeName + " - " +
                                 donation.getEventId() + " - " +  //should read event name by event id 
-                                tempType + " - " +
+                                   tempType + " - " +
                                 Common.convertDateToString(donation.getDonationDate())
                             );
         }

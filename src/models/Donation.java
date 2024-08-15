@@ -18,6 +18,7 @@ public class Donation implements Serializable {
     private char donateType;  //F-foods, C-cash, S-supplies
     private Date donationDate;
     private String remark;
+    public String get;
 
     
 

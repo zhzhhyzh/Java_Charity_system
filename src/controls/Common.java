@@ -168,7 +168,7 @@ public class Common {
                     case 6:
                     case 9:
                     case 11:
-                        if (day > 31) {
+                        if (day > 30) {
                             dateValidationFlag = false;
                         }
 
@@ -179,7 +179,7 @@ public class Common {
                     case 8:
                     case 10:
                     case 12:
-                        if (day > 32) {
+                        if (day > 31) {
                             dateValidationFlag = false;
                         }
 
@@ -197,7 +197,7 @@ public class Common {
                     case 6:
                     case 9:
                     case 11:
-                        if (day > 31) {
+                        if (day > 30) {
                             dateValidationFlag = false;
                         }
 
@@ -208,7 +208,7 @@ public class Common {
                     case 8:
                     case 10:
                     case 12:
-                        if (day > 32) {
+                        if (day > 31) {
                             dateValidationFlag = false;
                         }
 
