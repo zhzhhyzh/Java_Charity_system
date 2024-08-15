@@ -7,6 +7,8 @@ package charity;
 import boundaries.DonationManagement;
 import boundaries.DoneeManagement;
 import boundaries.DonorManagement;
+import utils.LinkedList;
+
 import java.util.Scanner;
 
 /** 
@@ -34,12 +36,19 @@ public class Charity {
             switch (input) {
                 case "1":
                     DonorManagement.display();
+                    DonorManagement.donors = new LinkedList<>();
+
                     break;
                 case "2":
                     DoneeManagement.display();
+                    DoneeManagement.donees = new LinkedList<>();
                     break;
                 case "3":
                     DonationManagement.display();
+                    DonationManagement.donees = new LinkedList<>();
+                    DonationManagement.donors = new LinkedList<>();
+                    DonationManagement.donations = new LinkedList<>();
+
                     break;
                 case "0":
                     flag = false;

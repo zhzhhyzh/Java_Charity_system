@@ -27,7 +27,7 @@ import utils.List;
  */
 public class DonorManagement {
 
-    private static final LinkedList<Donor> donors = new LinkedList<>();
+    public static  LinkedList<Donor> donors = new LinkedList<>();
 
     public static void display() {
         boolean flag = true;

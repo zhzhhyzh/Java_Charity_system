@@ -27,9 +27,9 @@ public class DonationManagement {
     public static final String divider = "=======================================================";
     private static final char[] yesOrNoTypeCode = {'Y', 'N'};
     private static final char[] DonationTypeCode = {'F', 'C','S'};
-    private static final LinkedList<Donation> donations = new LinkedList<>();
-    private static final LinkedList<Donor> donors = new LinkedList<>();
-    private static final LinkedList<Donee> donees = new LinkedList<>();
+    public static  LinkedList<Donation> donations = new LinkedList<>();
+    public static  LinkedList<Donor> donors = new LinkedList<>();
+    public static  LinkedList<Donee> donees = new LinkedList<>();
     
     public static void display(){
         try {

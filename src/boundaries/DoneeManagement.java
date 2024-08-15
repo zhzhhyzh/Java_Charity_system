@@ -29,7 +29,7 @@ public class DoneeManagement {
     private static final int PAGE_SIZE = 20;
     private static int currentPage = 0;
     public static final String divider = "=======================================================";
-    private static final LinkedList<Donee> donees = new LinkedList<>();
+    public static  LinkedList<Donee> donees = new LinkedList<>();
     private static final char[] financialTypeCode = { 'B', 'M', 'T' };
     private static final char[] genderTypeCode = { 'M', 'F' };
     private static final char[] yesOrNoTypeCode = { 'Y', 'N' };
