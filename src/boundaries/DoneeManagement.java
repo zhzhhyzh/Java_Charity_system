@@ -213,16 +213,26 @@ public class DoneeManagement {
         scanner.nextLine();
         String currentSituation = scanner.nextLine();
 
-        int tempDoneeId = 1001;
-        String doneeId = "";
-        for (int i = 1001; i == tempDoneeId; i++) {
-            Donee doneeDetail = (Donee) donees.get(Integer.toString(i), "getDoneeId");
-            if (doneeDetail != null) {
-                tempDoneeId++;
-            } else {
-                doneeId = Integer.toString(i);
+        // int tempDoneeId = 1001;
+        // String doneeId = "";
+        // for (int i = 1001; i == tempDoneeId; i++) {
+        // Donee doneeDetail = (Donee) donees.get(Integer.toString(i), "getDoneeId");
+        // if (doneeDetail != null) {
+        // tempDoneeId++;
+        // } else {
+        // doneeId = Integer.toString(i);
+        // }
+        // }
+        int current = 1001;
+
+        for (Donee donee : donees) {
+            if (Integer.parseInt(donee.getDoneeId()) > current) {
+                current = Integer.parseInt(donee.getDoneeId());
             }
+
         }
+        current++;
+        String doneeId = Integer.toString(current);
 
         char activeStatus = 'Y';
         int currentNo = donees.size() + 1;
@@ -280,7 +290,8 @@ public class DoneeManagement {
 
                 Date dob = doneeToBeUpdated.getDob();
                 do {
-                    System.out.println("Date of birth (dd-MM-yyyy): " + Common.convertDateToString(doneeToBeUpdated.getDob()));
+                    System.out.println(
+                            "Date of birth (dd-MM-yyyy): " + Common.convertDateToString(doneeToBeUpdated.getDob()));
                     System.out.print("Enter 0 to avoid update: ");
                     tempInput = scanner.next();
                     if (!tempInput.equals("0")) {
@@ -359,8 +370,8 @@ public class DoneeManagement {
                 do {
                     System.out.println(
                             "Financial Type (B - B40, M - M40, T - T20): " + doneeToBeUpdated.getFinancialType());
-                            System.out.print("Enter 0 to avoid update:");
-                            tempInput = scanner.next();
+                    System.out.print("Enter 0 to avoid update:");
+                    tempInput = scanner.next();
                     if (!tempInput.equals("0")) {
                         validation = Common.charValidator(tempInput, financialTypeCode);
                         onChange = true;
@@ -476,10 +487,9 @@ public class DoneeManagement {
                     case "0":
                         break;
                     default:
-                    System.out.println("Invalid Input");
+                        System.out.println("Invalid Input");
                 }
             } while (!validation || tempInput.equals("1"));
-         
 
         }
     }
@@ -632,6 +642,5 @@ public class DoneeManagement {
             System.err.println("An error occurred while writing the file: " + e.getMessage());
         }
     }
-
 
 }

@@ -13,9 +13,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -135,14 +137,86 @@ public class Common {
     }
 
     public static boolean dateValidator(String dateString, char constraint) {
-        String regex = "^(0[1-9]|1[0-9]|2[0-8])-(0[1-9]|1[0-2])-\\d{4}$\r\n" + //
-                "|^(0[1-9]|1[0-9]|2[0-9])-(02)-(0[1-9]|1[0-9]|2[0-8])-\\d{4}$\r\n" + //
-                "|^(0[1-9]|1[0-9]|2[0-9])-(02)-(29)-((0[48])|(1[2468][048])|(2[048])|(3[26])|(4[0])|(5[26])|(6[0])|(7[26])|(8[0])|(9[26]))$\r\n"
-                + //
-                "|^(30)-(04|06|09|11)-\\d{4}$\r\n" + //
-                "|^(31)-(01|03|05|07|08|10|12)-\\d{4}$\r\n" + //
-                "";
-        if (dateString.matches(regex)) {
+
+        // String regex = "^(0[1-9]|1[0-2])-(0[1-9]|1[0-2])-(\\d{4})$|" +
+        //         "^(0[1-9]|1[0-2])-(30)-(04|06|09|11)-(\\d{4})$|" +
+        //         "^(0[1-9]|1[0-2])-(31)-(01|03|05|07|08|10|12)-(\\d{4})$|" +
+        //         "^(02)-(0[1-9])-(\\d{4})$|" +
+        //         "^(02)-(1[0-2])-(\\d{4})$|" +
+        //         "^(02)-(2[0-8])-(\\d{4})$|" +
+        //         "^(02)-(29)-(?:(0[48])|(1[2468][048])|(2[048])|(3[26])|(4[0])|(5[26])|(6[0])|(7[26])|(8[0])|(9[26]))-(\\d{4})$";
+
+        // Pattern pattern = Pattern.compile(regex);
+        // Matcher matcher = pattern.matcher(dateString);
+
+        boolean dateValidationFlag = true;
+        String[] res = dateString.split("[-]", 0);
+        int day = Integer.parseInt(res[0]);
+        int month = Integer.parseInt(res[1]);
+        int year = Integer.parseInt(res[2]);
+        switch (year % 4) {
+
+            case 0:
+                switch (month) {
+                    case 2:
+                        if (day > 29) {
+                            dateValidationFlag = false;
+                        }
+                        break;
+
+                    case 4:
+                    case 6:
+                    case 9:
+                    case 11:
+                        if (day > 31) {
+                            dateValidationFlag = false;
+                        }
+
+                    case 1:
+                    case 3:
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 10:
+                    case 12:
+                        if (day > 32) {
+                            dateValidationFlag = false;
+                        }
+
+                }
+                break;
+            default:
+                switch (month) {
+                    case 2:
+                        if (day > 28) {
+                            dateValidationFlag = false;
+                        }
+                        break;
+
+                    case 4:
+                    case 6:
+                    case 9:
+                    case 11:
+                        if (day > 31) {
+                            dateValidationFlag = false;
+                        }
+
+                    case 1:
+                    case 3:
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 10:
+                    case 12:
+                        if (day > 32) {
+                            dateValidationFlag = false;
+                        }
+
+                }
+                break;
+        }
+
+        if (dateValidationFlag) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             LocalDate inputDate = LocalDate.parse(dateString, formatter);
             LocalDate today = LocalDate.now();
