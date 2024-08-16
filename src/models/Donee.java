@@ -1,11 +1,10 @@
 package models;
 
-import java.util.Calendar;
-import java.util.Date;
 import controls.Common;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.io.Serializable;
+import java.util.Date;
 /**
  *
  * @author Zhe Heng
@@ -21,12 +20,12 @@ public class Donee implements Serializable{
     private String email;
     private char gender;
     private double receivedAmount;
-    private char financialType; //B - B20, M - M40, T - T20
+    private char doneeType; //B - B20, M - M40, T - T20
     private String currentSituation; //
     private Date joinDate;
     private char activeStatus; //Y = yes, N - no
 
-    public Donee(String doneeId,String doneeIc, String name, Date dob, String phoneNo, String email, char gender, double receivedAmount, char financialType, String currentSituation, char activeStatus) {
+    public Donee(String doneeId,String doneeIc, String name, Date dob, String phoneNo, String email, char gender, double receivedAmount, char doneeType, String currentSituation, char activeStatus) {
         this.doneeId = doneeId;
         this.doneeIc = doneeIc;
         this.name = name;
@@ -35,7 +34,7 @@ public class Donee implements Serializable{
         this.email = email;
         this.gender = gender;
         this.receivedAmount = receivedAmount;
-        this.financialType = financialType;
+        this.doneeType = doneeType;
         this.currentSituation = currentSituation;
         LocalDate localDate = LocalDate.now();
         this.joinDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -44,7 +43,7 @@ public class Donee implements Serializable{
 
     }
 
-    public Donee(String doneeId, String doneeIc, String name, Date dob, String phoneNo, String email, char gender, double receivedAmount, char financialType, String currentSituation, Date joinDate, char activeStatus) {
+    public Donee(String doneeId, String doneeIc, String name, Date dob, String phoneNo, String email, char gender, double receivedAmount, char doneeType, String currentSituation, Date joinDate, char activeStatus) {
         this.doneeId = doneeId;
         this.doneeIc = doneeIc;
         this.name = name;
@@ -53,7 +52,7 @@ public class Donee implements Serializable{
         this.email = email;
         this.gender = gender;
         this.receivedAmount = receivedAmount;
-        this.financialType = financialType;
+        this.doneeType = doneeType;
         this.currentSituation = currentSituation;
         this.joinDate = joinDate;
         this.activeStatus = activeStatus;
@@ -125,12 +124,12 @@ public class Donee implements Serializable{
         this.receivedAmount = receivedAmount;
     }
 
-    public char getFinancialType() {
-        return financialType;
+    public char getDoneeType() {
+        return doneeType;
     }
 
-    public void setFinancialType(char financialType) {
-        this.financialType = financialType;
+    public void setdoneeType(char doneeType) {
+        this.doneeType = doneeType;
     }
 
     public String getCurrentSituation() {

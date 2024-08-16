@@ -11,6 +11,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
@@ -19,6 +21,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -73,6 +76,22 @@ public class Common {
         }
 
     }
+    
+    // Generic method to load data into a LinkedList from a file
+    public static <T> void loadData(String fileName, LinkedList<T> list, Class<T[]> type, Class<?> clazz) {
+        try {
+            Object[] objArr = (Object[]) Common.retrieveObjectsFromFile(list, fileName);
+            if (objArr != null) {
+                T[] arr = Arrays.copyOf(objArr, objArr.length, type);
+                for (T obj : arr) {
+                    list.add(obj);
+                }
+            }
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(clazz.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 
     public static boolean ICNoValidator(String icNo) {
         String regex = "^\\d{2}(0[1-9]|1[0-2])(\\d{2})-\\d{2}-\\d{4}$";
