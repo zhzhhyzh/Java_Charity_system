@@ -36,7 +36,7 @@ import utils.List;
 public class Common {
 
     final static String folder = "documents/";
-    public static final char[] GENDER_TYPE_CODE = { 'M', 'F' };
+    public static final char[] GENDER_TYPE_CODE = {'M', 'F'};
 
     public static void writeObjectsToFile(LinkedList<?> list, String filename) throws IOException {
         File file = new File(folder + filename);
@@ -76,7 +76,7 @@ public class Common {
         }
 
     }
-    
+
     // Generic method to load data into a LinkedList from a file
     public static <T> void loadData(String fileName, LinkedList<T> list, Class<T[]> type, Class<?> clazz) {
         try {
@@ -92,7 +92,6 @@ public class Common {
         }
     }
 
-
     public static boolean ICNoValidator(String icNo) {
         String regex = "^\\d{2}(0[1-9]|1[0-2])(\\d{2})-\\d{2}-\\d{4}$";
 
@@ -104,6 +103,25 @@ public class Common {
             System.out.println("Please follow the format (DDMMYY-XX-XXXX)");
             return false;
         }
+    }
+
+    public static boolean SmeNoValidator(String smeNo, String year) {
+        String regex = "\\d{4}(0[1-6])\\d{6}"; //Exp 200301123456, middle number only allowed for 01-06
+
+        if (!smeNo.matches(regex)) {
+            System.out.println("The SME No. format is invalid.");
+            System.out.println("Please follow the format (YYYYTTXXXXXX)");
+            return false;
+        }
+
+        String smeNoYear = smeNo.substring(0, 4);
+
+        if (!smeNoYear.equals(year)) {
+            System.out.println("The SME No. year is invalid.");
+            return false;
+        }
+
+        return true;
     }
 
     public static boolean integerValidator(String number) {
@@ -194,24 +212,24 @@ public class Common {
                             }
                             break;
 
-                    case 4:
-                    case 6:
-                    case 9:
-                    case 11:
-                        if (day > 30) {
-                            dateValidationFlag = false;
-                        }
+                        case 4:
+                        case 6:
+                        case 9:
+                        case 11:
+                            if (day > 30) {
+                                dateValidationFlag = false;
+                            }
 
-                    case 1:
-                    case 3:
-                    case 5:
-                    case 7:
-                    case 8:
-                    case 10:
-                    case 12:
-                        if (day > 31) {
-                            dateValidationFlag = false;
-                        }
+                        case 1:
+                        case 3:
+                        case 5:
+                        case 7:
+                        case 8:
+                        case 10:
+                        case 12:
+                            if (day > 31) {
+                                dateValidationFlag = false;
+                            }
 
                     }
                     break;
@@ -223,24 +241,24 @@ public class Common {
                             }
                             break;
 
-                    case 4:
-                    case 6:
-                    case 9:
-                    case 11:
-                        if (day > 30) {
-                            dateValidationFlag = false;
-                        }
+                        case 4:
+                        case 6:
+                        case 9:
+                        case 11:
+                            if (day > 30) {
+                                dateValidationFlag = false;
+                            }
 
-                    case 1:
-                    case 3:
-                    case 5:
-                    case 7:
-                    case 8:
-                    case 10:
-                    case 12:
-                        if (day > 31) {
-                            dateValidationFlag = false;
-                        }
+                        case 1:
+                        case 3:
+                        case 5:
+                        case 7:
+                        case 8:
+                        case 10:
+                        case 12:
+                            if (day > 31) {
+                                dateValidationFlag = false;
+                            }
 
                     }
                     break;

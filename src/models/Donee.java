@@ -5,11 +5,12 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+
 /**
  *
  * @author Zhe Heng
  */
-public class Donee implements Serializable{
+public class Donee implements Serializable {
 
     private String doneeId;
     private String doneeIc;
@@ -20,12 +21,13 @@ public class Donee implements Serializable{
     private String email;
     private char gender;
     private double receivedAmount;
-    private char doneeType; //B - B20, M - M40, T - T20
+    private char doneeType; //I-Individual, O-organization, F-family
     private String currentSituation; //
     private Date joinDate;
     private char activeStatus; //Y = yes, N - no
+    private String repName;
 
-    public Donee(String doneeId,String doneeIc, String name, Date dob, String phoneNo, String email, char gender, double receivedAmount, char doneeType, String currentSituation, char activeStatus) {
+    public Donee(String doneeId, String doneeIc, String name, Date dob, String phoneNo, String email, char gender, double receivedAmount, char doneeType, String currentSituation, char activeStatus, String repName) {
         this.doneeId = doneeId;
         this.doneeIc = doneeIc;
         this.name = name;
@@ -40,10 +42,11 @@ public class Donee implements Serializable{
         this.joinDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         this.activeStatus = activeStatus;
         this.age = Common.calculateAge(this.dob);
+        this.repName = repName;
 
     }
 
-    public Donee(String doneeId, String doneeIc, String name, Date dob, String phoneNo, String email, char gender, double receivedAmount, char doneeType, String currentSituation, Date joinDate, char activeStatus) {
+    public Donee(String doneeId, String doneeIc, String name, Date dob, String phoneNo, String email, char gender, double receivedAmount, char doneeType, String currentSituation, Date joinDate, char activeStatus, String repName) {
         this.doneeId = doneeId;
         this.doneeIc = doneeIc;
         this.name = name;
@@ -57,6 +60,7 @@ public class Donee implements Serializable{
         this.joinDate = joinDate;
         this.activeStatus = activeStatus;
         this.age = Common.calculateAge(this.dob);
+        this.repName = repName;
 
     }
 
@@ -74,6 +78,14 @@ public class Donee implements Serializable{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRepName() {
+        return repName;
+    }
+
+    public void setRepName(String repName) {
+        this.repName = repName;
     }
 
     public int getAge() {
@@ -155,8 +167,6 @@ public class Donee implements Serializable{
     public void setActiveStatus(char activeStatus) {
         this.activeStatus = activeStatus;
     }
-
-    
 
     public String getDoneeId() {
         return doneeId;

@@ -24,20 +24,26 @@ public class Charity {
 
         Scanner scanner = new Scanner(System.in);
         boolean flag = true;
+
+        System.out.println("=============================================");
+        System.out.println("          Cha Org. Management System");
+        
+        System.out.println("=============================================");
+
         while (flag) {
-            System.out.println("0. Exit");
+            System.out.println("\nMenu:");
             System.out.println("1. Donor Management Subsystem");
             System.out.println("2. Donee Management Subsystem");
             System.out.println("3. Donation Management Subsystem");
+            System.out.println("0. Exit");
 
-            System.out.print("Hi, please enter yout choice:");
+            System.out.print("Enter your choice: ");
             String input = scanner.next();
-            System.out.println("");
+
             switch (input) {
                 case "1":
                     DonorManagement.display();
                     DonorManagement.donors = new LinkedList<>();
-
                     break;
                 case "2":
                     DoneeManagement.display();
@@ -48,15 +54,16 @@ public class Charity {
                     DonationManagement.donees = new LinkedList<>();
                     DonationManagement.donors = new LinkedList<>();
                     DonationManagement.donations = new LinkedList<>();
-
                     break;
                 case "0":
                     flag = false;
+                    System.out.println("Exiting Cha Org. Management System.");
                     break;
                 default:
                     System.out.println("Invalid input!");
             }
         }
+        scanner.close(); // Close the scanner resource
     }
 
 }
