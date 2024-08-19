@@ -4,14 +4,14 @@
  */
 package charity;
 
+import java.util.Scanner;
+
 import boundaries.DonationManagement;
 import boundaries.DoneeManagement;
 import boundaries.DonorManagement;
 import utils.LinkedList;
 
-import java.util.Scanner;
-
-/** 
+/**
  *
  * @author quinton
  */
