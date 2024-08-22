@@ -16,7 +16,7 @@ public interface List<E> extends Collection<E>  {
      * Postcondition: -
      * Return       : Data with specified property
      */
-    public Object get(String value, String getterMethod);
+    public E get(String value, String getterMethod);
 
         /*
      * Description  : Inserts the specified element at the specified position in this list
