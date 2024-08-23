@@ -8,10 +8,8 @@ import controls.Common;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.Scanner;
@@ -73,7 +71,7 @@ public class DoneeManagement {
                     scanner.nextLine();
                     break;
                 case "3":
-                    String option = list(0, ' ', ' ');
+                    String option = list("", 0, ' ', ' ');
 
                     while (option.equals("3")) {
                         String tempInput;
@@ -81,6 +79,17 @@ public class DoneeManagement {
                         int listAge = 0;
                         char listAS;
                         char listFT;
+                        String listSearch;
+                        do {
+                            System.out.print("Search Donee Id or Name (Enter 0 to avoid filter): ");
+                            tempInput = scanner.next();
+                            if (!tempInput.equals("0")) {
+                                validation = Common.requiredField(tempInput);
+                            } else {
+                                validation = true;
+                            }
+                        } while (!validation);
+                        listSearch = tempInput;
                         do {
                             System.out.print("Age/Publish/Married Year(s) (Enter 0 to avoid filter): ");
                             tempInput = scanner.next();
@@ -121,7 +130,7 @@ public class DoneeManagement {
                         } else {
                             listFT = ' ';
                         }
-                        option = list(listAge, listAS, listFT);
+                        option = list(listSearch, listAge, listAS, listFT);
                     }
 
                     break;
@@ -729,11 +738,15 @@ public class DoneeManagement {
         }
     }
 
-    public static String list(int age, char activeStatus, char doneeType) {
+    public static String list(String search, int age, char activeStatus, char doneeType) {
         LinkedList<Donee> filteredDonees = new LinkedList<>();
 
         for (Donee donee : donees) {
             boolean matches = true;
+
+            if (!search.equals("") && (!donee.getName().contains(search) && !donee.getDoneeId().contains(search))) {
+                matches = false;
+            }
 
             if (age != 0 && donee.getAge() != age) {
                 matches = false;
