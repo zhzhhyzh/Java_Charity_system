@@ -95,7 +95,7 @@ public class DonationManagement {
             System.out.println("0. Exit");
 
             System.out.print("Please enter yout choice:");
-            String input = scanner.next();
+            String input = scanner.nextLine();
             System.out.println(divider2);
             switch (input) {
                 case "1":
@@ -130,8 +130,49 @@ public class DonationManagement {
                     break;
           
                 case "5":
-                    listDonation();
+                    String option = listDonation("",' ');
+                    
+                    while (option.equals("3")) {
+                        String tempInput;
+                        boolean validation = false;
+                        String listByDonor;
+                        char listByType;
+                        
+                        do {
+                            System.out.print("Enter donor ID to list his donation (type '0' to skip):");
+                            tempInput = scanner.nextLine();
+                            if (!tempInput.equals("0")) {
+                                Donor donorDetail = (Donor) donors.get(tempInput, "getDonorID");
+                                if (donorDetail != null) {
+                                    validation = true;
+                                } else {
+                                    System.out.println("Donor not found.");
+                                }
+                            }
+                            else {
+                                validation = true;
+                                tempInput = "";
+                            }
+                        } while (!validation);
+                        listByDonor = tempInput;
+                        
+                        do {
+                            System.out.print("Enter filter criteria (type 'F' for foods, 'C' for cash, 'S' for supplies, '0' to skip): ");
+                            tempInput = scanner.nextLine();
+                            if (!tempInput.equals("0")) {
+                                validation = Common.charValidator(tempInput, DonationTypeCode);
+                            } 
+                        } while (!validation);
+                        if (!tempInput.equals("0")){
+                            listByType = Character.toUpperCase(tempInput.charAt(0));
+                        } else {
+                            listByType = ' ';
+                        }
+                        
+                        option = listDonation(listByDonor, listByType);
+                    }
                     break;
+                    
                     
                 case "6":
                     trackDonatedItems();
@@ -205,6 +246,14 @@ public class DonationManagement {
         } while (!validation);
         char donateType = Character.toUpperCase(tempInput.charAt(0));
         
+        
+        do {
+            System.out.print("Estimate value of donation: RM");
+            tempInput = scanner.next();
+            validation = Common.integerValidator(tempInput);
+        } while (!validation);
+        double estValue = Common.DoubleFormatter(Double.parseDouble(tempInput));
+        
         do {
             System.out.print("Enter donation date (dd-MM-yyyy): ");
             tempInput = scanner.next();
@@ -238,9 +287,19 @@ public class DonationManagement {
             
         
         int currentNo = donations.size() + 1;
-        Donation donation = new Donation(donationId, donorId, doneeId, eventId, donateType, donationDate, remark);
+        Donation donation = new Donation(donationId, donorId, doneeId, eventId, donateType, estValue, donationDate, remark);
         donations.add(donation);
         System.out.println("Donation " + donation.getDonationId() + " Recorded.");
+        
+        
+        //Sum up the received amount of the donee 
+        Donee donee = (Donee) donees.get(doneeId, "getDoneeId");
+        double AccValue = donee.getReceivedAmount() + estValue;
+        Donee doneeUpdated = new Donee(doneeId, donee.getDoneeIc(), donee.getName(), donee.getDob(), donee.getPhoneNo(), donee.getEmail(),
+                                        donee.getGender(), AccValue, donee.getDoneeType(), donee.getCurrentSituation(),
+                                        donee.getJoinDate(), donee.getActiveStatus(), donee.getRepName());
+        donees.remove(donee);
+        donees.add(doneeUpdated);
     }
     
     public static void removeDonation(String idInput){
@@ -321,6 +380,14 @@ public class DonationManagement {
                     } while (!validation);
                     char newDonateType = Character.toUpperCase(tempInput.charAt(0));
                     
+                    //Update Estimate Value
+                    do {
+                        System.out.print("Update estimate value of donation: RM");
+                        tempInput = scanner.next();
+                        validation = Common.integerValidator(tempInput);
+                    } while (!validation);
+                    double newEstValue = Common.DoubleFormatter(Double.parseDouble(tempInput));
+                    
                     //Update donation date
                     do {
                         System.out.print("Update donation date (dd-MM-yyyy): ");
@@ -334,7 +401,7 @@ public class DonationManagement {
                     scanner.nextLine();
                     String newRemark = scanner.nextLine();
 
-                    Donation updateDonation = new Donation(idInput,newDonorId, newDoneeId, newEventId, newDonateType, newDonationDate, newRemark);
+                    Donation updateDonation = new Donation(idInput,newDonorId, newDoneeId, newEventId, newDonateType, newEstValue, newDonationDate, newRemark);
                     donations.add(updateDonation);
                     System.out.println("Donation Record Updated.");
                 }
@@ -363,24 +430,39 @@ public class DonationManagement {
         }
     }
     
-    public static void listDonation(){
+    public static String listDonation(String donorId, char type){
+        LinkedList<Donation> filteredDonations = new LinkedList<>();
+        
+        for (Donation donation : donations) {
+            boolean match = true;
+            
+            if ((!donorId.equals("")) && (!donation.getDonorId().equals(donorId ))) {
+                match = false;
+            }
+            if (type != ' ' && donation.getDonateType() != type) {
+                match = false;
+            }
+            
+            if (match) {
+                filteredDonations.add(donation);
+            }
+        }
         
         System.out.println("Donation Records: ");
         
         String input = "0";
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
-
-
+        
         while (running) {
             int start = currentPage * PAGE_SIZE;
             int end = Math.min(start + PAGE_SIZE, donations.size());
             System.out.println(divider2 + divider2);
-            System.out.printf("%-5s | %-20s | %-20s | %-15s | %-10s | %-10s%n" ,
-                    "ID", "Donor", "Donee", "Event", "Type", "Date");
+            System.out.printf("%-5s | %-20s | %-20s | %-15s | %-10s | %-10s | %-10s%n" ,
+                    "ID", "Donor", "Donee", "Event", "Type","Value(RM)", "Date");
             System.out.println(divider2 + divider2);    
             
-            for (Donation donation: donations) {
+            for (Donation donation: filteredDonations) {
                 String donorName = "";
                 String doneeName = "";
                 //String eventName = "";
@@ -426,12 +508,13 @@ public class DonationManagement {
 //                                    tempType + " - " +
 //                                    Common.convertDateToString(donation.getDonationDate())
 //                                );
-                System.out.printf("%-5s | %-20s | %-20s | %-15s | %-10s | %-10s%n" ,
+                System.out.printf("%-5s | %-20s | %-20s | %-15s | %-10s | %-10s | %-10s%n" ,
                         donation.getDonationId(),
                         donorName,
                         doneeName,
                         donation.getEventId(),
                         tempType,
+                        donation.getEstValue(),
                         Common.convertDateToString(donation.getDonationDate()));
             }
             
@@ -439,7 +522,7 @@ public class DonationManagement {
             
             System.out.println(divider2 + divider2);
             System.out.println("Page " + (currentPage + 1) + " of " + ((donations.size() + PAGE_SIZE - 1) / PAGE_SIZE));
-            System.out.println("Enter '1' for next page, '2' for previous page, '0' to back:");
+            System.out.print("Enter '1' for next page, '2' for previous page, '3' for list by criteria, '4' for generate report, '0' to back: ");
 
             input = scanner.nextLine().trim();
 
@@ -461,14 +544,10 @@ public class DonationManagement {
                         break;
                         
                     case "3":
-                        listDonationsByDonor();
+                        running = false;
                         break;
                         
                     case "4":
-                        filterDonations();
-                        break;
-                        
-                    case "5":
                         generateSummaryReport();
                         break;
                         
@@ -481,6 +560,7 @@ public class DonationManagement {
                         break;
                 }
             }   
+        return input;
     }
     
     
@@ -491,18 +571,24 @@ public class DonationManagement {
         int foodCount = 0;
         int cashCount = 0;
         int suppliesCount = 0;
+        int foodValue = 0;
+        int cashValue = 0;
+        int suppliesValue = 0;
 
         // Count donations based on type
         for (Donation donation : donations) {
             switch (donation.getDonateType()) {
                 case 'F':
                     foodCount++;
+                    foodValue += donation.getEstValue();
                     break;
                 case 'C':
                     cashCount++;
+                    cashValue += donation.getEstValue();
                     break;
                 case 'S':
                     suppliesCount++;
+                    suppliesValue += donation.getEstValue();
                     break;
                 default:
                     System.out.println("Unknown donation type: " + donation.getDonateType());
@@ -510,44 +596,12 @@ public class DonationManagement {
         }
 
         // Display counts
-        System.out.println("Foods: " + foodCount);
-        System.out.println("Cash: " + cashCount);
-        System.out.println("Supplies: " + suppliesCount);
+        System.out.println("Foods: " + foodCount + "(estimated RM " + foodValue + ")");
+        System.out.println("Cash: " + cashCount + "(estimated RM " + cashValue + ")");
+        System.out.println("Supplies: " + suppliesCount + "(estimated RM " + suppliesValue + ")");
     }
     
-    public static void listDonationsByDonor() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter donor ID to list donations: ");
-        String donorId = scanner.nextLine();
-
-        boolean found = false;
-        System.out.println("Donations made by Donor ID " + donorId + ":");
-
-        for (Donation donation : donations) {
-            if (donation.getDonorId().equals(donorId)) {
-                System.out.println(donation);
-                found = true;
-            }
-        }
-
-        if (!found) {
-            System.out.println("No donations found for Donor ID " + donorId);
-        }
-    }
     
-    public static void filterDonations() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter filter criteria (e.g., type 'F' for foods, 'C' for cash, 'S' for supplies): ");
-        char typeFilter = scanner.nextLine().toUpperCase().charAt(0);
-
-        System.out.println("Filtered Donations:");
-
-        for (Donation donation : donations) {
-            if (donation.getDonateType() == typeFilter) {
-                System.out.println(donation);
-            }
-        }
-    }
     
     public static void generateSummaryReport() {
 //        int totalDonations = donations.size();
