@@ -96,7 +96,7 @@ public class DonorManagement {
                     String dateString = tempInput;
                     Date dob = new Date(Integer.parseInt(dateString.split("-")[0]), Integer.parseInt(dateString.split("-")[1]), Integer.parseInt(dateString.split("-")[2]));
 
-                    int currentNo = donors.size() + 1;
+                    int currentNo = Integer.parseInt(donors.get(donors.size()-1).getDonorID())+ 1;
                     Donor donor = new Donor(Integer.toString(currentNo), name, age, new Date(), gender);
                     donors.add(donor);
                     System.out.println("Successfully added new donor with ID: " + currentNo + "\n");

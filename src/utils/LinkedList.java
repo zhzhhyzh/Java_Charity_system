@@ -45,7 +45,7 @@ public class LinkedList<E>
         }
     }
 
-    public Object get(String value, String methodToGetValue) {
+    public E get(String value, String methodToGetValue) {
 
         for (Node<E> node = head;
                 node != null;
