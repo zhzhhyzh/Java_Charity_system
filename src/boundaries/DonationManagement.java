@@ -300,6 +300,12 @@ public class DonationManagement {
                                         donee.getJoinDate(), donee.getActiveStatus(), donee.getRepName());
         donees.remove(donee);
         donees.add(doneeUpdated);
+        
+        Donor donor = (Donor) donors.get(donorId, "getDonorID");
+        AccValue = donor.getDonationAmount() + estValue;
+        Donor donorUpdated = new Donor(donorId, donor.getName(), donor.getAge(), donor.getDob(), donor.getGender(), AccValue);
+        donors.remove(donor);
+        donors.add(donorUpdated);
     }
     
     public static void removeDonation(String idInput){
