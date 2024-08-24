@@ -294,13 +294,12 @@ public class DoneeManagement {
         } while (!validation);
         String email = tempInput;
 
-        do {
-            System.out.print("Enter the receivedAmount: RM");
-            tempInput = scanner.next();
-            validation = Common.doubleValidator(tempInput);
-        } while (!validation);
-        double receivedAmount = Common.DoubleFormatter(Double.parseDouble(tempInput));
-
+        // do {
+        //     System.out.print("Enter the receivedAmount: RM");
+        //     tempInput = scanner.next();
+        //     validation = Common.doubleValidator(tempInput);
+        // } while (!validation);
+        // double receivedAmount = Common.DoubleFormatter(Double.parseDouble(tempInput));
         System.out.print("Enter Remarks: ");
         scanner.nextLine();
         String currentSituation = scanner.nextLine();
@@ -318,7 +317,7 @@ public class DoneeManagement {
 
         char activeStatus = 'Y';
         int currentNo = donees.size() + 1;
-        Donee donee = new Donee(doneeId, doneeIc, name, dob, phoneNo, email, gender, receivedAmount, doneeType,
+        Donee donee = new Donee(doneeId, doneeIc, name, dob, phoneNo, email, gender, 0, doneeType,
                 currentSituation, activeStatus, repName);
         donees.add(donee);
         System.out.println("Record Created: " + donee.getDoneeId());
@@ -587,19 +586,19 @@ public class DoneeManagement {
                 }
 
                 double receivedAmount = doneeToBeUpdated.getReceivedAmount();
-                do {
-                    System.out.println("ReceivedAmount: RM" + doneeToBeUpdated.getReceivedAmount());
-                    System.out.print("Enter 0 to avoid update:");
-                    tempInput = scanner.next();
-                    if (!tempInput.equals("0")) {
-                        validation = Common.doubleValidator(tempInput);
-                        onChange = true;
-                    }
-                } while (!validation);
-                if (onChange) {
-                    receivedAmount = Common.DoubleFormatter(Double.parseDouble(tempInput));
-                    onChange = false;
-                }
+                // do {
+                //     System.out.println("ReceivedAmount: RM" + doneeToBeUpdated.getReceivedAmount());
+                //     System.out.print("Enter 0 to avoid update:");
+                //     tempInput = scanner.next();
+                //     if (!tempInput.equals("0")) {
+                //         validation = Common.doubleValidator(tempInput);
+                //         onChange = true;
+                //     }
+                // } while (!validation);
+                // if (onChange) {
+                //     receivedAmount = Common.DoubleFormatter(Double.parseDouble(tempInput));
+                //     onChange = false;
+                // }
 
                 do {
                     System.out.println("Remarks: " + doneeToBeUpdated.getCurrentSituation());
@@ -913,7 +912,7 @@ public class DoneeManagement {
             for (Donation donation : donations) {
                 boolean matches = true;
 
-                if (donation.getDoneeId() == doneeId) {
+                if (donation.getDoneeId().equals(doneeId)) {
                     filteredDonations.add(donation);
                 }
             }
@@ -924,7 +923,7 @@ public class DoneeManagement {
                 System.out.printf("%-5s | %-20s | %-15s | %-10s | %-10s%n",
                         "ID", "Donor", "Event", "Type", "Date");
                 System.out.println(divider + divider);
-
+                double totalReceivedAmount = 0;
                 for (Donation donation : filteredDonations) {
                     String donorName = "";
                     //String eventName = "";
@@ -942,6 +941,7 @@ public class DoneeManagement {
                             break;
                     }
 
+                    // totalReceivedAmount += donation.getAmount();
                     for (Donor donor : donors) {
                         if (donor.getDonorID().equals(donation.getDonorId())) {
                             donorName = donor.getName();
@@ -970,6 +970,8 @@ public class DoneeManagement {
                             Common.convertDateToString(donation.getDonationDate()));
                 }
 
+                System.out.println(divider + divider);
+                System.err.println("Total Amount Received: " + totalReceivedAmount);
                 System.out.println(divider + divider);
                 System.out.println("Page " + (currentPage + 1) + " of " + ((donations.size() + PAGE_SIZE - 1) / PAGE_SIZE));
                 System.out.println("Enter '1' for next page, '2' for previous page, '0' to back:");
