@@ -18,7 +18,7 @@ public class Donor implements Serializable {
     @Override
     public String toString() {
 //        return "Donor{" + "donorID=" + donorID + ", name=" + name + ", age=" + age + ", dob=" + dob + ", gender=" + gender + '}';
-        return "Donor:\nDonor ID: " + donorID + "\nName: " + name + "\nAge: " + age + "\nDate of Birth: " + Common.convertDateToString(dob) + "\nGender: " + gender;
+        return "Donor:\nDonor ID: " + donorID + "\nName: " + name + "\nAge: " + age + "\nDate of Birth: " + Common.convertDateToString(dob) + "\nGender: " + gender+"\nDonation Amount: "+donationAmount;
     }
 
     public String getDonorID() {
@@ -35,6 +35,7 @@ public class Donor implements Serializable {
         this.age = age;
         this.dob = dob;
         this.gender = gender;
+        this.donationAmount = 0;
     }
 
     public String getName() {
@@ -65,6 +66,15 @@ public class Donor implements Serializable {
     private int age;
     private Date dob;
     private char gender;
+    private double donationAmount;
+
+    public double getDonationAmount() {
+        return donationAmount;
+    }
+
+    public void setDonationAmount(double donationAmount) {
+        this.donationAmount = donationAmount;
+    }
 
     public char getGender() {
         return gender;
