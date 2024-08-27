@@ -615,7 +615,7 @@ public class DonationManagement {
 //        int totalDonees = (int) donees.stream().count();
 //
 //        System.out.println("Summary Report:");
-//        System.out.println("Total Donations: " + totalDonations);
+//     x`   System.out.println("Total Donations: " + totalDonations);
 //        System.out.println("Total Donors: " + totalDonors);
 //        System.out.println("Total Donees: " + totalDonees);
 
