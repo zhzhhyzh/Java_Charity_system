@@ -97,8 +97,8 @@ public class DonorManagement {
                     Date dob = new Date(Integer.parseInt(dateString.split("-")[0]), Integer.parseInt(dateString.split("-")[1]), Integer.parseInt(dateString.split("-")[2]));
 
                     int currentNo = Integer.parseInt(donors.get(donors.size()-1).getDonorID())+ 1;
-                    Donor donor = new Donor(Integer.toString(currentNo), name, age, new Date(), gender);
-                    donors.add(donor);
+                    Donor donor = new Donor(Integer.toString(currentNo), name, age, new Date(), gender, 0);
+                    donors.add(donor); 
                     System.out.println("Successfully added new donor with ID: " + currentNo + "\n");
                     break;
                 case "2":
@@ -117,6 +117,7 @@ public class DonorManagement {
                     System.out.print("Enter ID: ");
                     String idToBeUpdated = scanner.next();
                     Donor donorToBeUpdated = (Donor) donors.get(idToBeUpdated, "getDonorID");
+                    double donationAmount2 = donorToBeUpdated.getDonationAmount();
                     if (donorToBeUpdated == null) {
                         System.out.println("Donor not found!\n");
                         break;
@@ -156,7 +157,7 @@ public class DonorManagement {
                     } while (!validation2);
                     String dateString2 = tempInput2;
                     Date dob2 = new Date(Integer.parseInt(dateString2.split("-")[0]), Integer.parseInt(dateString2.split("-")[1]), Integer.parseInt(dateString2.split("-")[2]));
-                    Donor donorObjToBeUpdated = new Donor(idToBeUpdated, name2, age2, new Date(), gender2);
+                    Donor donorObjToBeUpdated = new Donor(idToBeUpdated, name2, age2, new Date(), gender2, donationAmount2);
                     donors.add(donorObjToBeUpdated);
                     System.out.println("Successfully updated donor with ID: " + idToBeUpdated + "\n");
                     break;

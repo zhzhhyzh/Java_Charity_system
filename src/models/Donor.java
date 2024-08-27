@@ -29,13 +29,13 @@ public class Donor implements Serializable {
         this.donorID = donorID;
     }
 
-    public Donor(String donorID, String name, int age, Date dob, char gender) {
+    public Donor(String donorID, String name, int age, Date dob, char gender, double donation) {
         this.donorID = donorID;
         this.name = name;
         this.age = age;
         this.dob = dob;
         this.gender = gender;
-        this.donationAmount = 0;
+        this.donationAmount = donation;
     }
 
     public String getName() {

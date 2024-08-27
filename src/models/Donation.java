@@ -16,6 +16,7 @@ public class Donation implements Serializable {
     private String doneeId;
     private String eventId;
     private char donateType;  //F-foods, C-cash, S-supplies
+    private double estValue;
     private Date donationDate;
     private String remark;
     public String get;
@@ -23,12 +24,13 @@ public class Donation implements Serializable {
     
 
 
-        public Donation(String donationId, String donorId, String doneeId, String eventId, char donateType, Date donationDate, String remark) {
+        public Donation(String donationId, String donorId, String doneeId, String eventId, char donateType,double estValue, Date donationDate, String remark) {
         this.donationId = donationId;
         this.donorId = donorId;
         this.doneeId = doneeId;
         this.eventId = eventId;
         this.donateType = donateType;
+        this.estValue = estValue;
         this.donationDate = donationDate;
         this.remark = remark;
     }
@@ -61,6 +63,24 @@ public class Donation implements Serializable {
     public void setDonateType(char donateType) {
         this.donateType = donateType;
     }
+
+    public double getEstValue() {
+        return estValue;
+    }
+
+    public void setEstValue(int estValue) {
+        this.estValue = estValue;
+    }
+
+    public String getGet() {
+        return get;
+    }
+
+    public void setGet(String get) {
+        this.get = get;
+    }
+    
+    
 
     public Date getDonationDate() {
         return donationDate;
