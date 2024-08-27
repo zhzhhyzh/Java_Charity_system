@@ -15,10 +15,11 @@ import java.util.Date;
  */
 public class Donor implements Serializable {
 
+
     @Override
     public String toString() {
 //        return "Donor{" + "donorID=" + donorID + ", name=" + name + ", age=" + age + ", dob=" + dob + ", gender=" + gender + '}';
-        return "Donor:\nDonor ID: " + donorID + "\nName: " + name + "\nAge: " + age + "\nDate of Birth: " + Common.convertDateToString(dob) + "\nGender: " + gender+"\nDonation Amount: "+donationAmount;
+        return "Donor:\nDonor ID: " + donorID + "\nName: " + name + "\nAge: " + age + "\nDate of Birth: " + getDobInString() + "\nGender: " + getGenderInString()+"\nDonation Amount: "+donationAmount;
     }
 
     public String getDonorID() {
@@ -29,15 +30,23 @@ public class Donor implements Serializable {
         this.donorID = donorID;
     }
 
-    public Donor(String donorID, String name, int age, Date dob, char gender, double donation) {
+    public Donor(String donorID, String name, int age, Date dob, char gender) {
         this.donorID = donorID;
         this.name = name;
         this.age = age;
         this.dob = dob;
         this.gender = gender;
-        this.donationAmount = donation;
+        this.donationAmount = 0;
     }
 
+     public Donor(String donorID, String name, int age, Date dob, char gender, double donationAmount) {
+        this.donorID = donorID;
+        this.name = name;
+        this.age = age;
+        this.dob = dob;
+        this.gender = gender;
+        this.donationAmount = donationAmount;
+    }
     public String getName() {
         return name;
     }
@@ -57,7 +66,9 @@ public class Donor implements Serializable {
     public Date getDob() {
         return dob;
     }
-
+    public String getDobInString() {
+        return Common.convertDateToString(dob);
+    }
     public void setDob(Date dob) {
         this.dob = dob;
     }
@@ -79,7 +90,9 @@ public class Donor implements Serializable {
     public char getGender() {
         return gender;
     }
-
+    public String getGenderInString() {
+        return gender=='M'?"Male":"Female";
+    }
     public void setGender(char gender) {
         this.gender = gender;
     }

@@ -4,10 +4,12 @@
  */
 package boundaries;
 
+import static boundaries.DoneeManagement.DIVIDER;
 import charity.*;
 import controls.Common;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import java.util.Iterator;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import models.Donee;
 import models.Donor;
 import utils.List;
 
@@ -27,7 +30,11 @@ import utils.List;
  */
 public class DonorManagement {
 
-    public static  LinkedList<Donor> donors = new LinkedList<>();
+    public static LinkedList<Donor> donors = new LinkedList<>();
+    private static final int PAGE_SIZE = 20;
+    private static int currentPage = 0;
+    public static final String divider = "=======================================================";
+    public static final String DIVIDER = "-------------------------------------------------------------------------------------------------------";
 
     public static void display() {
         boolean flag = true;
@@ -96,9 +103,13 @@ public class DonorManagement {
                     String dateString = tempInput;
                     Date dob = new Date(Integer.parseInt(dateString.split("-")[0]), Integer.parseInt(dateString.split("-")[1]), Integer.parseInt(dateString.split("-")[2]));
 
-                    int currentNo = Integer.parseInt(donors.get(donors.size()-1).getDonorID())+ 1;
-                    Donor donor = new Donor(Integer.toString(currentNo), name, age, new Date(), gender, 0);
-                    donors.add(donor); 
+                    int currentNo = 0; //default
+                    if (donors.size() > 0) {
+                        currentNo = Integer.parseInt(donors.get(donors.size() - 1).getDonorID()) + 1;
+
+                    }
+                    Donor donor = new Donor(Integer.toString(currentNo), name, age, new Date(), gender);
+                    donors.add(donor);
                     System.out.println("Successfully added new donor with ID: " + currentNo + "\n");
                     break;
                 case "2":
@@ -164,7 +175,7 @@ public class DonorManagement {
                 case "4":
                     System.out.print("Enter ID: ");
                     String idToBeFound = scanner.next();
-                                        System.out.println("");
+                    System.out.println("");
 
                     Donor donorToBeFound = (Donor) donors.get(idToBeFound, "getDonorID");
                     if (donorToBeFound == null) {
@@ -176,13 +187,60 @@ public class DonorManagement {
                     }
                     break;
                 case "5":
-                    System.out.println("--------------------------------------------------------------------");
+                    String option = list("", 0, 0, 0);
 
-                    System.out.println("Donors: ");
-                    for (Donor currentDonor : donors) {
-                        System.out.println(currentDonor.getDonorID() + " - " + currentDonor.getName());
+                    while (option.equals("3")) {
+                        String tempInput3;
+                        boolean validation3 = false;
+                        int listAge = 0;
+                        double donationAmountStart;
+                        double donationAmountEnd;
+                        String listSearch;
+                        do {
+                            System.out.print("Search Donee Id or Name (Enter 0 to avoid filter): ");
+                            tempInput3 = scanner.next();
+                            if (!tempInput3.equals("0")) {
+                                validation3 = Common.requiredField(tempInput3);
+                            } else {
+                                validation3 = true;
+                            }
+                        } while (!validation3);
+                        listSearch = tempInput3;
+                        do {
+                            System.out.print("Age (Enter 0 to avoid filter): ");
+                            tempInput3 = scanner.next();
+                            if (!tempInput3.equals("0")) {
+                                validation3 = Common.integerValidator(tempInput3);
+                            } else {
+                                validation3 = true;
+                            }
+                        } while (!validation3);
+                        listAge = Integer.parseInt(tempInput3);
+                        do {
+                            System.out.print("Minimum donation amount (Enter 0 to avoid filter): ");
+//                            System.out.print("Enter 0 to avoid filter on age: ");
+                            tempInput3 = scanner.next();
+                            if (!tempInput3.equals("0")) {
+                                validation3 = Common.doubleValidator(tempInput3);
+                            }
+                        } while (!validation3);
+
+                        donationAmountStart = Double.parseDouble(tempInput3);
+                        do {
+                            System.out.print("Maximum donation amount (Enter 0 to avoid filter): ");
+
+//                            System.out.print("Enter 0 to avoid filter on age: ");
+//                            scanner.nextLine();
+                            tempInput3 = scanner.next();
+                            if (!tempInput3.equals("0")) {
+                                validation3 = Common.doubleValidator(tempInput3);
+                            }
+                        } while (!validation3);
+                        donationAmountEnd = Double.parseDouble(tempInput3);
+
+                        option = list(listSearch, listAge, donationAmountStart, donationAmountEnd);
                     }
-                    System.out.println("--------------------------------------------------------------------\n");
+                    System.out.println("");
 
                     break;
 
@@ -216,4 +274,125 @@ public class DonorManagement {
             }
         }
     }
+
+    public static String list(String search, int age, double donationAmountStart, double donationAmountEnd) {
+        LinkedList<Donor> filteredDonors = new LinkedList<>();
+
+        for (Donor donor : donors) {
+            boolean matches = true;
+
+            if (!search.equals("") && (!donor.getName().contains(search) && !donor.getDonorID().contains(search))) {
+                matches = false;
+            }
+
+            if (age != 0 && donor.getAge() != age) {
+                matches = false;
+            }
+
+            if (donationAmountStart != 0 && donationAmountEnd != 0) {
+                if (donor.getDonationAmount()<donationAmountStart || donor.getDonationAmount()>donationAmountEnd) {
+                    matches = false;
+                }
+            }else if(donationAmountStart!=0){
+                if (donor.getDonationAmount()<donationAmountStart) {
+                    matches = false;
+                }
+            }else if(donationAmountEnd!=0){
+                if (donor.getDonationAmount()>donationAmountEnd) {
+                    matches = false;
+                }
+            }
+
+            if (matches) {
+                filteredDonors.add(donor);
+            }
+        }
+        String input = "0";
+        Scanner scanner = new Scanner(System.in);
+        boolean running = true;
+
+        while (running) {
+            int start = currentPage * PAGE_SIZE;
+            int end = Math.min(start + PAGE_SIZE, donors.size());
+            System.out.println(DIVIDER);
+            System.out.printf("%-25s | %-20s | %-15s | %-15s | %-15s |\n", "Donor", "Age", "Gender", "Date of Birth", "Donation Amount");
+            System.out.println(DIVIDER); 
+            for (Donor donor : filteredDonors) {
+
+                String donorField = donor.getDonorID() + " - " + donor.getName();
+
+                System.out.printf("%-25s | %-20d | %-15s | %-15s | %15s |%n",
+                        donorField, donor.getAge(), donor.getGenderInString(), donor.getDobInString(), donor.getDonationAmount());
+            }
+            System.out.println(DIVIDER);
+            System.out.println("Page " + (currentPage + 1) + " of " + ((donors.size() + PAGE_SIZE - 1) / PAGE_SIZE));
+            System.out.println(
+                    "Enter '1' for next page, '2' for previous page, '3' for list by criteria, '4' for generate report, '0' to back:");
+
+            input = scanner.nextLine().trim();
+
+            switch (input) {
+                case "1":
+                    if ((currentPage + 1) * PAGE_SIZE < donors.size()) {
+                        currentPage++;
+                    } else {
+                        System.out.println("You are already on the last page.");
+                    }
+                    break;
+                case "2":
+                    if (currentPage > 0) {
+                        currentPage--;
+                    } else {
+                        System.out.println("You are already on the first page.");
+                    }
+                    break;
+                case "3":
+                    running = false;
+                    break;
+                case "4":
+                    generate(filteredDonors);
+                    break;
+                case "0":
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid input, please enter '1', '2', '3', '4' or '0'");
+                    break;
+            }
+        }
+
+        // scanner.close();
+        return input;
+    }
+
+    public static void generate(LinkedList<Donor> filteredDonors) {
+        String baseDownloadPath = System.getProperty("user.home") + "/Downloads/donor_list.txt";
+        int fileCount = 1;
+        String downloadPath = baseDownloadPath;
+
+        while (new File(downloadPath).exists()) {
+            downloadPath = baseDownloadPath + "(" + fileCount++ + ").txt";
+        }
+        try (FileWriter writer = new FileWriter(new File(downloadPath))) {
+            writer.write("DONOR NAME LIST\nTotal Donors: " + filteredDonors.size() + "\n");
+            writer.write(DIVIDER + "\n");
+            writer.write(String.format("%-30s | %-10s | %-15s | %-15s | %-20s |%n",
+                        "Donor", "Age", "Gender", "Date of Birth", "Donation Amount"));
+            writer.write(DIVIDER + "\n");
+            for (Donor donor : filteredDonors) {
+                String tempActiveStatus = " - ";
+
+                String donorField = donor.getDonorID() + " - " + donor.getName();
+
+                writer.write(String.format("%-30s | %-10d | %-15s | %-15s | %20s |%n",
+                        donorField, donor.getAge(), donor.getGenderInString(), donor.getDobInString(), donor.getDonationAmount()));
+            }
+                        writer.write(DIVIDER + "\n");
+
+            System.out.println("File successfully saved to " + downloadPath);
+        } catch (IOException e) {
+            System.err.println("An error occurred while writing the file: " + e.getMessage());
+        }
+    }
+
 }
