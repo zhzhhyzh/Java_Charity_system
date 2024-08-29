@@ -26,10 +26,10 @@ import utils.LinkedList;
  */
 public class DoneeManagement {
 
-    private static final int PAGE_SIZE = 20;
+    private static final int PAGE_SIZE = 10;
     private static int currentPage = 0;
     public static final String divider = "=======================================================";
-    public static final String DIVIDER = "---------------------------------------------------------------------------------";
+    public static final String DIVIDER = "-----------------------------------------------------------------------------------------";
     public static LinkedList<Donation> donations = new LinkedList<>();
     public static LinkedList<Donee> donees = new LinkedList<>();
     private static final String UNXERR = "Unexpected Error. Please Contact Administrator.";
@@ -158,9 +158,9 @@ public class DoneeManagement {
         boolean validation = false;
         String tempInput;
         Scanner scanner = new Scanner(System.in);
-        System.out.println(divider);
+        System.out.println("\n" + divider);
         System.out.println("Donee (Add)");
-        System.out.println(divider + "\n");
+        System.out.println(divider);
 
         do {
             System.out.print("Enter Donee Type ([I]-Individual, [O]-Organization, [F]-Family): ");
@@ -185,7 +185,7 @@ public class DoneeManagement {
                 name = tempInput;
 
                 do {
-                    System.out.print("Enter IC No. (DDMMYY-XX-XXXX): ");
+                    System.out.print("Enter IC No. (YYMMDD-XX-XXXX): ");
                     tempInput = scanner.next();
                     validation = Common.ICNoValidator(tempInput);
                 } while (!validation);
@@ -261,7 +261,7 @@ public class DoneeManagement {
                     validation = Common.dateValidator(tempInput, 'M');
                 } while (!validation);
                 dob = Common.structureForDateParsing(tempInput);
-
+                scanner.nextLine();
                 do {
                     System.out.print("Enter Family Rep. name: ");
                     tempInput = scanner.nextLine();
@@ -680,7 +680,7 @@ public class DoneeManagement {
             switch (doneeDetail.getDoneeType()) {
                 case 'I':
                     System.out.println("Name: " + doneeDetail.getName());
-                    System.out.println("IC No. (DDMMYY-XX-XXXX): " + doneeDetail.getDoneeIc());
+                    System.out.println("IC No. (YYMMDD-XX-XXXX): " + doneeDetail.getDoneeIc());
                     System.out.println("Date of birth (dd-MM-yyyy): " + Common.convertDateToString(doneeDetail.getDob()));
                     System.out.println("Age : " + doneeDetail.getAge());
                     System.out.println("Gender (M - Male, F - Female): " + doneeDetail.getGender());
@@ -769,38 +769,46 @@ public class DoneeManagement {
             int start = currentPage * PAGE_SIZE;
             int end = Math.min(start + PAGE_SIZE, donees.size());
             System.out.println(DIVIDER);
-            System.out.printf("%-25s | %-20s | %-15s | %-15s%n", "Donee", "Age/Publish/Married", "Active Status", "Donee Type");
+            System.out.printf("%-25s | %-20s | %-15s | %-15s | %n", "Donee", "Age/Publish/Married", "Active Status", "Donee Type");
             System.out.println(DIVIDER);
+            int countPrint = 1;
+            int printNumber = (currentPage + 1) * 10;
+
+            int NoPrintNumber = printNumber - 10;
             for (Donee donee : filteredDonees) {
-                String tempActiveStatus = " - ";
-                switch (donee.getActiveStatus()) {
-                    case 'Y':
-                        tempActiveStatus = "Yes";
-                        break;
-                    case 'N':
-                        tempActiveStatus = "No";
-                        break;
 
+                if (countPrint <= printNumber && countPrint > NoPrintNumber) {
+                    String tempActiveStatus = " - ";
+                    switch (donee.getActiveStatus()) {
+                        case 'Y':
+                            tempActiveStatus = "Yes";
+                            break;
+                        case 'N':
+                            tempActiveStatus = "No";
+                            break;
+
+                    }
+
+                    String tempDonee = " - ";
+                    switch (donee.getDoneeType()) {
+                        case 'I':
+                            tempDonee = "Individual";
+                            break;
+                        case 'O':
+                            tempDonee = "Organization";
+                            break;
+                        case 'F':
+                            tempDonee = "Family";
+                            break;
+
+                    }
+
+                    String doneeField = donee.getDoneeId() + " - " + donee.getName();
+
+                    System.out.printf("%-25s | %-20d | %-15s | %-15s |%n",
+                            doneeField, donee.getAge(), tempActiveStatus, tempDonee);
                 }
-
-                String tempDonee = " - ";
-                switch (donee.getDoneeType()) {
-                    case 'I':
-                        tempDonee = "Individual";
-                        break;
-                    case 'O':
-                        tempDonee = "Organization";
-                        break;
-                    case 'F':
-                        tempDonee = "Family";
-                        break;
-
-                }
-
-                String doneeField = donee.getDoneeId() + " - " + donee.getName();
-
-                System.out.printf("%-25s | %-20d | %-15s | %-15s%n",
-                        doneeField, donee.getAge(), tempActiveStatus, tempDonee);
+                countPrint++;
             }
             System.out.println(DIVIDER);
             System.out.println("Page " + (currentPage + 1) + " of " + ((donees.size() + PAGE_SIZE - 1) / PAGE_SIZE));
@@ -854,7 +862,9 @@ public class DoneeManagement {
         try (FileWriter writer = new FileWriter(new File(downloadPath))) {
             writer.write("DONEE NAME LIST\nTotal Donees: " + filteredDonees.size() + "\n");
             writer.write(DIVIDER + "\n");
-            writer.write("Donee       | Age/Publish/Married | Active Status   | Donee Type\n");
+//            writer.write("Donee       | Age/Publish/Married | Active Status   | Donee Type\n");
+            writer.write(String.format("%-30s | %-20s | %-15s | %-15s |%n",
+                    "Donee", "Age/Publish/Married", "Active Status", "Donee Type"));
             writer.write(DIVIDER + "\n");
             for (Donee donee : filteredDonees) {
                 String tempActiveStatus = " - ";
@@ -882,8 +892,10 @@ public class DoneeManagement {
 
                 String doneeField = donee.getDoneeId() + " - " + donee.getName();
 
-                writer.write(String.format("%-10s | %-20d | %-15s | %-15s%n",
+                writer.write(String.format("%-30s | %-20d | %-15s | %-15s |%n",
                         doneeField, donee.getAge(), tempActiveStatus, tempDonee));
+                writer.write(DIVIDER + "\n");
+
             }
             System.out.println("File successfully saved to " + downloadPath);
         } catch (IOException e) {
@@ -920,61 +932,69 @@ public class DoneeManagement {
                 int start = currentPage * PAGE_SIZE;
                 int end = Math.min(start + PAGE_SIZE, donations.size());
                 System.out.println(divider + divider);
-                System.out.printf("%-5s | %-20s | %-15s | %-10s | %-10s%n",
+                System.out.printf("%-5s | %-20s | %-15s | %-10s | %-10s |%n",
                         "ID", "Donor", "Event", "Type", "Date");
                 System.out.println(divider + divider);
                 double totalReceivedAmount = 0;
+                int countPrint = 1;
+                int printNumber = (currentPage + 1) * 10;
+
+                int NoPrintNumber = printNumber - 10;
                 for (Donation donation : filteredDonations) {
-                    String donorName = "";
-                    //String eventName = "";
+                    if (countPrint <= printNumber && countPrint > NoPrintNumber) {
+                        String donorName = "";
+                        //String eventName = "";
 
-                    String tempType = "-";
-                    switch (donation.getDonateType()) {
-                        case 'F':
-                            tempType = "Foods";
-                            break;
-                        case 'C':
-                            tempType = "Cash";
-                            break;
-                        case 'S':
-                            tempType = "Supplies";
-                            break;
-                    }
-
-                    // totalReceivedAmount += donation.getAmount();
-                    for (Donor donor : donors) {
-                        if (donor.getDonorID().equals(donation.getDonorId())) {
-                            donorName = donor.getName();
-                            break;
+                        String tempType = "-";
+                        switch (donation.getDonateType()) {
+                            case 'F':
+                                tempType = "Foods";
+                                break;
+                            case 'C':
+                                tempType = "Cash";
+                                break;
+                            case 'S':
+                                tempType = "Supplies";
+                                break;
                         }
-                    }
 
-                    //                 for (Event event:events){
-                    //                     if (event.getEventId().equals(donation.getEventId())){
-                    //                         eventName = event.getEventName();
-                    //                         break;
-                    //                     }
-                    //                }
-                    //                System.out.println(donation.getDonationId() + " - " +
-                    //                                    donorName + " - " +  
-                    //                                    doneeName + " - " +
-                    //                                    donation.getEventId() + " - " +  //should read event name by event id 
-                    //                                    tempType + " - " +
-                    //                                    Common.convertDateToString(donation.getDonationDate())
-                    //                                );
-                    System.out.printf("%-5s | %-20s | %-15s | %-10s | %-10s%n",
-                            donation.getDonationId(),
-                            donorName,
-                            donation.getEventId(),
-                            tempType,
-                            Common.convertDateToString(donation.getDonationDate()));
+                        // totalReceivedAmount += donation.getAmount();
+                        for (Donor donor : donors) {
+                            if (donor.getDonorID().equals(donation.getDonorId())) {
+                                donorName = donor.getName();
+                                break;
+                            }
+                        }
+
+                        //                 for (Event event:events){
+                        //                     if (event.getEventId().equals(donation.getEventId())){
+                        //                         eventName = event.getEventName();
+                        //                         break;
+                        //                     }
+                        //                }
+                        //                System.out.println(donation.getDonationId() + " - " +
+                        //                                    donorName + " - " +  
+                        //                                    doneeName + " - " +
+                        //                                    donation.getEventId() + " - " +  //should read event name by event id 
+                        //                                    tempType + " - " +
+                        //                                    Common.convertDateToString(donation.getDonationDate())
+                        //                                );
+                        System.out.printf("%-5s | %-20s | %-15s | %-10s | %-10s |%n",
+                                donation.getDonationId(),
+                                donorName,
+                                donation.getEventId(),
+                                tempType,
+                                Common.convertDateToString(donation.getDonationDate()));
+                        countPrint++;
+                    }
                 }
 
                 System.out.println(divider + divider);
                 System.err.println("Total Amount Received: " + totalReceivedAmount);
                 System.out.println(divider + divider);
+                
                 System.out.println("Page " + (currentPage + 1) + " of " + ((donations.size() + PAGE_SIZE - 1) / PAGE_SIZE));
-                System.out.println("Enter '1' for next page, '2' for previous page, '0' to back:");
+                System.out.println("Enter '1' for next page, '2' for previous page, 0' to back:");
 
                 input = scanner.nextLine().trim();
 
@@ -1001,9 +1021,9 @@ public class DoneeManagement {
                     // case "4":
                     //     filterDonations();
                     //     break;
-                    // case "5":
-                    //     generateSummaryReport();
-                    //     break;
+//                    case "3":
+//                        generateDonation(filteredDonations);
+//                        break;
                     case "0":
                         running = false;
                         break;
