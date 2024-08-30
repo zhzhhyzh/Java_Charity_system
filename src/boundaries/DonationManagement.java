@@ -5,6 +5,8 @@
 package boundaries;
 
 import controls.Common;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Scanner;
@@ -20,10 +22,10 @@ import utils.LinkedList;
  * @author WaiKit
  */
 public class DonationManagement {
-    private static final int PAGE_SIZE = 20;
+    private static final int PAGE_SIZE = 10;
     private static int currentPage = 0;
     public static final String divider = "=======================================================";
-    public static final String divider2 = "-------------------------------------------------------";
+    public static final String divider2 = "----------------------------------------------------------";
     private static final char[] yesOrNoTypeCode = {'Y', 'N'};
     private static final char[] DonationTypeCode = {'F', 'C','S'};
     public static LinkedList<Donation> donations = new LinkedList<>();
@@ -38,45 +40,6 @@ public class DonationManagement {
         Common.loadData("donors.dat", donors, Donor[].class,DonorManagement.class);
         Common.loadData("donees.dat", donees, Donee[].class,DoneeManagement.class);
 
-//        try {
-//            Object[] objArr = (Object[]) (Common.retrieveObjectsFromFile(donations, "donations.dat"));
-//
-//            if (objArr != null) {
-//                Donation[] donationsArr = Arrays.copyOf(objArr, objArr.length, Donation[].class);
-//
-//                for (Donation donation : donationsArr) {
-//                    donations.add(donation);
-//                }
-//            }
-//        } catch (IOException | ClassNotFoundException ex) {
-//            Logger.getLogger(DoneeManagement.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        try {
-//            Object[] objArr = (Object[]) (Common.retrieveObjectsFromFile(donors, "donors.dat"));
-//
-//            if (objArr != null) {
-//                Donor[] donorsArr = Arrays.copyOf(objArr, objArr.length, Donor[].class);
-//
-//                for (Donor donor : donorsArr) {
-//                    donors.add(donor);
-//                }
-//            }
-//        } catch (IOException | ClassNotFoundException ex) {
-//            Logger.getLogger(DoneeManagement.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        try {
-//            Object[] objArr = (Object[]) (Common.retrieveObjectsFromFile(donees, "donees.dat"));
-//
-//            if (objArr != null) {
-//                Donee[] doneesArr = Arrays.copyOf(objArr, objArr.length, Donee[].class);
-//
-//                for (Donee donee : doneesArr) {
-//                    donees.add(donee);
-//                }
-//            }
-//        } catch (IOException | ClassNotFoundException ex) {
-//            Logger.getLogger(DoneeManagement.class.getName()).log(Level.SEVERE, null, ex);
-//        }
 
 
          Scanner scanner = new Scanner(System.in);
@@ -207,8 +170,6 @@ public class DonationManagement {
             Donor donorDetail = (Donor) donors.get(tempInput, "getDonorID");
             if (donorDetail != null) {
                 validation = true;
-            } else if (tempInput.equals("0")){
-                break;
             } else {
                 System.out.println("This donor ID does not exist.");
             }
@@ -221,8 +182,6 @@ public class DonationManagement {
             Donee doneeDetail = (Donee) donees.get(tempInput, "getDoneeId");
             if (doneeDetail != null) {
                 validation = true;
-            } else if (tempInput.equals("0")){
-                break;
             } else {
                 System.out.println("This donee ID does not exist.");
                 validation = false;
@@ -261,7 +220,7 @@ public class DonationManagement {
         } while (!validation);
         Date donationDate = Common.structureForDateParsing(tempInput);
  
-        System.out.print("remark: ");
+        System.out.print("Description(remark): ");
         scanner.nextLine();
         String remark = scanner.nextLine();
         
@@ -456,85 +415,56 @@ public class DonationManagement {
         
         System.out.println("Donation Records: ");
         
+        currentPage = 0; //reset for a fresh listing
+        
         String input = "0";
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
         
         while (running) {
             int start = currentPage * PAGE_SIZE;
-            int end = Math.min(start + PAGE_SIZE, donations.size());
+            int end = Math.min(start + PAGE_SIZE, filteredDonations.size());
             System.out.println(divider2 + divider2);
-            System.out.printf("%-5s | %-20s | %-20s | %-15s | %-10s | %-10s | %-10s%n" ,
+            System.out.printf("%-5s | %-25s | %-25s | %-15s | %-10s | %-10s | %-10s%n" ,
                     "ID", "Donor", "Donee", "Event", "Type","Value(RM)", "Date");
-            System.out.println(divider2 + divider2);    
+            System.out.println(divider2 + divider2);
             
-            for (Donation donation: filteredDonations) {
-                String donorName = "";
-                String doneeName = "";
-                //String eventName = "";
+            int countPrint = 1;
+            int printNumber = (currentPage + 1) * PAGE_SIZE;
+            int NoPrintNumber = printNumber - PAGE_SIZE;
 
-                String tempType = "-";
-                switch (donation.getDonateType()) {
-                    case 'F':
-                        tempType = "Foods";
-                        break;
-                    case 'C':
-                        tempType = "Cash";
-                        break;
-                    case 'S':
-                        tempType = "Supplies";
-                        break;
-                }
 
-                for (Donee donee:donees){
-                    if (donee.getDoneeId().equals(donation.getDoneeId())){
-                        doneeName = donee.getName();
-                        break;
-                    }
-                }
+              for (int i = NoPrintNumber; i < printNumber && i < filteredDonations.size(); i++) {
+                Donation donation = filteredDonations.get(i);
+                String donorName = getDonorName(donation.getDonorId());
+                String doneeName = getDoneeName(donation.getDoneeId());
+                String tempType = getDonationType(donation.getDonateType());
 
-                for (Donor donor:donors){
-                    if (donor.getDonorID().equals(donation.getDonorId())){
-                        donorName = donor.getName();
-                        break;
-                    }
-                }
 
-//                 for (Event event:events){
-//                     if (event.getEventId().equals(donation.getEventId())){
-//                         eventName = event.getEventName();
-//                         break;
-//                     }
-//                }
-
-//                System.out.println(donation.getDonationId() + " - " +
-//                                    donorName + " - " +  
-//                                    doneeName + " - " +
-//                                    donation.getEventId() + " - " +  //should read event name by event id 
-//                                    tempType + " - " +
-//                                    Common.convertDateToString(donation.getDonationDate())
-//                                );
-                System.out.printf("%-5s | %-20s | %-20s | %-15s | %-10s | %-10s | %-10s%n" ,
+                System.out.printf("%-5s | %-25s | %-25s | %-15s | %-10s | %-10s | %-10s%n" ,
                         donation.getDonationId(),
-                        donorName,
-                        doneeName,
+                        donorName + "(" + donation.getDonorId() + ")",
+                        doneeName + "(" + donation.getDoneeId() + ")",
                         donation.getEventId(),
                         tempType,
                         donation.getEstValue(),
                         Common.convertDateToString(donation.getDonationDate()));
+                
+                
+                countPrint++;
             }
             
 
             
             System.out.println(divider2 + divider2);
-            System.out.println("Page " + (currentPage + 1) + " of " + ((donations.size() + PAGE_SIZE - 1) / PAGE_SIZE));
+            System.out.println("Page " + (currentPage + 1) + " of " + ((filteredDonations.size() + PAGE_SIZE - 1) / PAGE_SIZE));
             System.out.print("Enter '1' for next page, '2' for previous page, '3' for list by criteria, '4' for generate report, '0' to back: ");
 
             input = scanner.nextLine().trim();
 
                 switch (input) {
                     case "1":
-                        if ((currentPage + 1) * PAGE_SIZE < donations.size()) {
+                        if ((currentPage + 1) * PAGE_SIZE < filteredDonations.size()) {
                             currentPage++;
                         } else {
                             System.out.println("You are already on the last page.");
@@ -554,7 +484,7 @@ public class DonationManagement {
                         break;
                         
                     case "4":
-                        generateSummaryReport();
+                        generateSummaryReport(filteredDonations);
                         break;
                         
                     case "0":
@@ -562,63 +492,150 @@ public class DonationManagement {
                         break;
                         
                     default:
-                        System.out.println("Invalid input, please enter '1', '2' or '0'");
+                        System.out.println("Invalid input, please enter '1', '2', '3', '4' or '0'");
                         break;
                 }
             }   
+        
         return input;
     }
     
-    
-    public static void trackDonatedItems() {
-        System.out.println("Tracking Donated Items by Category:");
+    private static String getDonorName(String donorId) {
+    for (Donor donor : donors) {
+        if (donor.getDonorID().equals(donorId)) {
+            return donor.getName();
+        }
+    }
+    return "";
+}
 
-        // Initialize counters
-        int foodCount = 0;
-        int cashCount = 0;
-        int suppliesCount = 0;
-        int foodValue = 0;
-        int cashValue = 0;
-        int suppliesValue = 0;
-
-        // Count donations based on type
-        for (Donation donation : donations) {
-            switch (donation.getDonateType()) {
-                case 'F':
-                    foodCount++;
-                    foodValue += donation.getEstValue();
-                    break;
-                case 'C':
-                    cashCount++;
-                    cashValue += donation.getEstValue();
-                    break;
-                case 'S':
-                    suppliesCount++;
-                    suppliesValue += donation.getEstValue();
-                    break;
-                default:
-                    System.out.println("Unknown donation type: " + donation.getDonateType());
+    private static String getDoneeName(String doneeId) {
+        for (Donee donee : donees) {
+            if (donee.getDoneeId().equals(doneeId)) {
+                return donee.getName();
             }
         }
+        return "";
+    }
 
-        // Display counts
-        System.out.println("Foods: " + foodCount + "(estimated RM " + foodValue + ")");
-        System.out.println("Cash: " + cashCount + "(estimated RM " + cashValue + ")");
-        System.out.println("Supplies: " + suppliesCount + "(estimated RM " + suppliesValue + ")");
+    private static String getDonationType(char donateType) {
+        switch (donateType) {
+            case 'F':
+                return "Foods";
+            case 'C':
+                return "Cash";
+            case 'S':
+                return "Supplies";
+            default:
+                return "-";
+        }
+    }
+
+    
+    
+    public static void trackDonatedItems() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("TRACK DONATED ITEMS");
+        
+        int currentPage = 0;
+ 
+        while (true) {
+            System.out.println(divider2 + divider2);
+            System.out.printf("%-5s | %-30s | %-10s | %-10s | %-15s%n",
+                    "ID", "Description", "Type", "Value(RM)", "Donated Date");
+            System.out.println(divider2 + divider2);
+
+            int start = currentPage * PAGE_SIZE;
+            int end = Math.min(start + PAGE_SIZE, donations.size());
+
+            for (int i = start; i < end; i++) {
+                Donation donation = donations.get(i);
+                String description = donation.getRemark();  // You should implement this method if necessary
+                String type = getDonationType(donation.getDonateType());
+                double value = donation.getEstValue();
+                String donatedDate = Common.convertDateToString(donation.getDonationDate());
+
+                System.out.printf("%-5s | %-30s | %-10s | %-10s | %-15s%n",
+                        donation.getDonationId(), description, type, value, donatedDate);
+            }
+
+            System.out.println(divider2 + divider2);
+            System.out.println("Page " + (currentPage + 1) + " of " + ((donations.size() + PAGE_SIZE - 1) / PAGE_SIZE));
+            System.out.print("Enter '1' for next page, '2' for previous page, or '0' to exit: ");
+            
+            String input = scanner.nextLine().trim();
+
+            switch (input) {
+                case "1":
+                    if ((currentPage + 1) * PAGE_SIZE < donations.size()) {
+                        currentPage++;
+                    } else {
+                        System.out.println("You are already on the last page.");
+                    }
+                    break;
+
+                case "2":
+                    if (currentPage > 0) {
+                        currentPage--;
+                    } else {
+                        System.out.println("You are already on the first page.");
+                    }
+                    break;
+                    
+                case "0":
+                    System.out.println("Exiting Track Donated Items.");
+                    return;
+
+                default:
+                    System.out.println("Invalid input, please enter '1', '2' or '0'");
+                    break;
+            }
+        }
     }
     
     
     
-    public static void generateSummaryReport() {
-//        int totalDonations = donations.size();
-//        int totalDonors = (int) donors.stream().count();
-//        int totalDonees = (int) donees.stream().count();
-//
-//        System.out.println("Summary Report:");
-//     x`   System.out.println("Total Donations: " + totalDonations);
-//        System.out.println("Total Donors: " + totalDonors);
-//        System.out.println("Total Donees: " + totalDonees);
+    public static void generateSummaryReport(LinkedList<Donation> filteredDonations) {
+        String baseDownloadPath = System.getProperty("user.home") + "/Downloads/donation.txt";
+        int fileCount = 1;
+        String downloadPath = baseDownloadPath;
 
-        // Further summary can be added here, like donations per donor, donations per donee, etc.
+        while (new File(downloadPath).exists()) {
+            downloadPath = baseDownloadPath + "(" + fileCount++ + ").txt";
+        }
+        
+        StringBuilder reportContent = new StringBuilder();
+        reportContent.append("Donation Summary Report\n");
+        reportContent.append("Generated on: ").append(Common.convertDateToString(new Date())).append("\n");
+        reportContent.append(divider2).append(divider2).append("\n");
+        reportContent.append(String.format("%-5s | %-25s | %-25s | %-15s | %-10s | %-10s | %-10s%n",
+                         "ID", "Donor", "Donee", "Event", "Type", "Value(RM)", "Date"));
+        reportContent.append(divider2).append(divider2).append("\n");
+        
+        for (Donation donation : filteredDonations) {
+        String donorName = getDonorName(donation.getDonorId());
+        String doneeName = getDoneeName(donation.getDoneeId());
+        String tempType = getDonationType(donation.getDonateType());
+        
+        reportContent.append(String.format("%-5s | %-20s | %-20s | %-15s | %-10s | %-10s | %-10s%n",
+                donation.getDonationId(),
+                donorName,
+                doneeName,
+                donation.getEventId(),
+                tempType,
+                donation.getEstValue(),
+                Common.convertDateToString(donation.getDonationDate())));
     }
+        
+        
+        
+        
+        try (FileWriter writer = new FileWriter(new File(downloadPath))) {
+            writer.write(reportContent.toString());
+            System.out.println("Report generated successfully and saved to " + downloadPath);
+        } catch (IOException e) {
+            System.err.println("An error occurred while writing the file: " + e.getMessage());
+        }
+    }
+    
 }
