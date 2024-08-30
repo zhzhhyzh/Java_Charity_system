@@ -371,6 +371,7 @@ public class Common {
 
     public static boolean requiredField(String input) {
         if (input == null || input == "" || input.isEmpty()) {
+             System.out.println("This is a required field.");
             return false;
         } else {
             return true;

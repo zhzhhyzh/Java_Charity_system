@@ -31,7 +31,7 @@ import utils.List;
 public class DonorManagement {
 
     public static LinkedList<Donor> donors = new LinkedList<>();
-    private static final int PAGE_SIZE = 20;
+    private static final int PAGE_SIZE = 10;
     private static int currentPage = 0;
     public static final String divider = "=======================================================";
     public static final String DIVIDER = "-------------------------------------------------------------------------------------------------------";
@@ -55,7 +55,29 @@ public class DonorManagement {
             Logger.getLogger(DonorManagement.class.getName()).log(Level.SEVERE, null, ex);
         }
         while (flag) {
+//  donors.add(new Donor("2", "Quinton", 13, new Date(), 'M'));
+//       donors.add(new Donor("3", "Quinton", 13, new Date(), 'M'));
+//  donors.add(new Donor("4", "Quinton", 13, new Date(), 'M'));
+//  donors.add(new Donor("5", "Quinton", 13, new Date(), 'M'));
+//  donors.add(new Donor("6", "Quinton", 13, new Date(), 'M'));
+//  donors.add(new Donor("7", "Quinton", 13, new Date(), 'M'));
+//  donors.add(new Donor("8", "Quinton", 13, new Date(), 'M'));
+//  donors.add(new Donor("9", "Quinton", 13, new Date(), 'M'));
+//  donors.add(new Donor("10", "Quinton", 13, new Date(), 'M'));
+//  donors.add(new Donor("11", "Quinton", 13, new Date(), 'M'));
+//  donors.add(new Donor("12", "Quinton", 13, new Date(), 'M'));
+//  donors.add(new Donor("13", "Quinton", 13, new Date(), 'M'));
+//  donors.add(new Donor("14", "Quinton", 13, new Date(), 'M'));
+//  donors.add(new Donor("15", "Quinton", 13, new Date(), 'M'));
 
+
+      
+      
+   
+   
+   
+   
+            
             System.out.println("0. Exit");
             System.out.println("1. Add a new donor");
             System.out.println("2. Remove a donor");
@@ -63,7 +85,7 @@ public class DonorManagement {
             System.out.println("4. Search donor details");
             System.out.println("5. List all donors");
 
-            System.out.print("Hi, please enter yout choice:");
+            System.out.print("Hi, please enter yout choice: ");
             String input = scanner.next();
             scanner.nextLine();  // Consume newline left-over
 
@@ -197,13 +219,13 @@ public class DonorManagement {
                         double donationAmountEnd;
                         String listSearch;
                         do {
-                            System.out.print("Search Donee Id or Name (Enter 0 to avoid filter): ");
-                            tempInput3 = scanner.next();
-                            if (!tempInput3.equals("0")) {
-                                validation3 = Common.requiredField(tempInput3);
-                            } else {
+                            System.out.print("Search Donee Id or Name (Empty to avoid filter): ");
+                            tempInput3 = scanner.nextLine();
+//                            if (!tempInput3.equals("\n")) {
+////                                validation3 = Common.requiredField(tempInput3);
+//                            } else {
                                 validation3 = true;
-                            }
+//                            }
                         } while (!validation3);
                         listSearch = tempInput3;
                         do {
@@ -313,19 +335,24 @@ public class DonorManagement {
 
         while (running) {
             int start = currentPage * PAGE_SIZE;
-            int end = Math.min(start + PAGE_SIZE, donors.size());
+            int end = Math.min(start + PAGE_SIZE, filteredDonors.size());
             System.out.println(DIVIDER);
             System.out.printf("%-25s | %-20s | %-15s | %-15s | %-15s |\n", "Donor", "Age", "Gender", "Date of Birth", "Donation Amount");
             System.out.println(DIVIDER); 
-            for (Donor donor : filteredDonors) {
+            
+            Donor[] newFilteredDonors = new Donor[end-start];
+            
+            System.arraycopy(filteredDonors.toArray(), start           , newFilteredDonors, 0     , end-start);
 
+            for (Donor donor : newFilteredDonors) {
+                
                 String donorField = donor.getDonorID() + " - " + donor.getName();
 
                 System.out.printf("%-25s | %-20d | %-15s | %-15s | %15s |%n",
                         donorField, donor.getAge(), donor.getGenderInString(), donor.getDobInString(), donor.getDonationAmount());
             }
             System.out.println(DIVIDER);
-            System.out.println("Page " + (currentPage + 1) + " of " + ((donors.size() + PAGE_SIZE - 1) / PAGE_SIZE));
+            System.out.println("Page " + (currentPage + 1) + " of " + ((filteredDonors.size() + PAGE_SIZE - 1) / PAGE_SIZE));
             System.out.println(
                     "Enter '1' for next page, '2' for previous page, '3' for list by criteria, '4' for generate report, '0' to back:");
 
@@ -333,7 +360,7 @@ public class DonorManagement {
 
             switch (input) {
                 case "1":
-                    if ((currentPage + 1) * PAGE_SIZE < donors.size()) {
+                    if ((currentPage + 1) * PAGE_SIZE < filteredDonors.size()) {
                         currentPage++;
                     } else {
                         System.out.println("You are already on the last page.");
