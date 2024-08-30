@@ -125,9 +125,12 @@ public class DonorManagement {
                     String dateString = tempInput;
                     Date dob = new Date(Integer.parseInt(dateString.split("-")[0]), Integer.parseInt(dateString.split("-")[1]), Integer.parseInt(dateString.split("-")[2]));
 
+                    LinkedList <Donor> tempDonors = donors;
+                    tempDonors.sort("getDonorID",true);
+//                    System.out.println(tempDonors.get(tempDonors.size() - 1));
                     int currentNo = 0; //default
-                    if (donors.size() > 0) {
-                        currentNo = Integer.parseInt(donors.get(donors.size() - 1).getDonorID()) + 1;
+                    if (tempDonors.size() > 0) {
+                        currentNo = Integer.parseInt(tempDonors.get(tempDonors.size() - 1).getDonorID()) + 1;
 
                     }
                     Donor donor = new Donor(Integer.toString(currentNo), name, age, new Date(), gender);
@@ -267,7 +270,7 @@ public class DonorManagement {
                     break;
 
                 case "0": {
-                    donors.sort("getDonorID");
+                    donors.sort("getDonorID",true);
 
                     // THERE ARE TWO WAYS TO WRITE INTO FILE                    
                     // 1. WRITE AS ARRAYLIST

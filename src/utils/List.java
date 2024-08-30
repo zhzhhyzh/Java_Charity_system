@@ -92,5 +92,5 @@ public interface List<E> extends Collection<E>  {
      * Postcondition: List is arranged by elements' property in ascending order
      * Return       : 
      */
-    public void sort(String getterMethod);
+    public void sort(String getterMethod, boolean isInteger);
 }

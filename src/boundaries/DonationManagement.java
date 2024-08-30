@@ -179,7 +179,7 @@ public class DonationManagement {
                     break;
                     
                 case "0":
-                    donations.sort("getDonationId");
+                    donations.sort("getDonationId",false);
                     try {
                         Common.writeObjectsToFile(donations, "donations.dat");
                         Common.writeObjectsToFile(donors, "donors.dat");

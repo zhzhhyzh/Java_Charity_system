@@ -135,7 +135,7 @@ public class DoneeManagement {
 
                     break;
                 case "0":
-                    donees.sort("getDoneeId");
+                    donees.sort("getDoneeId",false);
                     try {
                         Common.writeObjectsToFile(donors, "donors.dat");
                         Common.writeObjectsToFile(donations, "donations.dat");

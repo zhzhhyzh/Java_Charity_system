@@ -157,7 +157,10 @@ public class LinkedList<E>
         ptr1.data = tmp;
     }
 
-    public void sort(String getterMethod) {
+    public void sort(String getterMethod, boolean isInteger) {
+        if(!isInteger){
+            isInteger = false;
+        }
         boolean swapped;
         Node current;
 
@@ -175,10 +178,18 @@ public class LinkedList<E>
                 while (current.next != null) {
                     String valueFound = (String) method.invoke(current.data);
                     String nextValueFound = (String) method.invoke(current.next.data);
-                    if (valueFound.compareTo(nextValueFound) > 0) {
+                    if(isInteger){
+                        if (Integer.parseInt(valueFound)>Integer.parseInt(nextValueFound)) {
                         swap(current, current.next);
                         swapped = true;
                     }
+                    }else{
+                        if (valueFound.compareTo(nextValueFound) > 0) {
+                        swap(current, current.next);
+                        swapped = true;
+                    }
+                    }
+                    
                     current = current.next;
                 }
             } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
