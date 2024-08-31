@@ -837,7 +837,7 @@ public class DoneeManagement {
                 countPrint++;
             }
             System.out.println(DIVIDER);
-            System.out.println("Page " + (currentPage + 1) + " of " + ((donees.size() + PAGE_SIZE - 1) / PAGE_SIZE));
+            System.out.println("Page " + (currentPage + 1) + " of " + ((filteredDonees.size() + PAGE_SIZE - 1) / PAGE_SIZE));
             System.out.println(
                     "Enter '1' for next page, '2' for previous page, '3' for list by criteria, '4' for generate report, '0' to back:");
 
@@ -845,7 +845,7 @@ public class DoneeManagement {
 
             switch (input) {
                 case "1":
-                    if ((currentPage + 1) * PAGE_SIZE < donees.size()) {
+                    if ((currentPage + 1) * PAGE_SIZE < filteredDonees.size()) {
                         currentPage++;
                     } else {
                         System.out.println("You are already on the last page.");
@@ -1019,14 +1019,14 @@ public class DoneeManagement {
                 System.out.println(divider + divider);
                 System.err.println("Total Est. Amount Received: " + totalReceivedAmount);
 
-                System.out.println("Page " + (currentPage + 1) + " of " + ((donations.size() + PAGE_SIZE - 1) / PAGE_SIZE));
+                System.out.println("Page " + (currentPage + 1) + " of " + ((filteredDonations.size() + PAGE_SIZE - 1) / PAGE_SIZE));
                 System.out.println("Enter '1' for next page, '2' for previous page, 0' to back:");
 
                 input = scanner.nextLine().trim();
 
                 switch (input) {
                     case "1":
-                        if ((currentPage + 1) * PAGE_SIZE < donations.size()) {
+                        if ((currentPage + 1) * PAGE_SIZE < filteredDonations.size()) {
                             currentPage++;
                         } else {
                             System.out.println("You are already on the last page.");
