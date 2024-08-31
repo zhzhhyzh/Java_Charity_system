@@ -28,7 +28,7 @@ public class DoneeManagement {
 
     private static final int PAGE_SIZE = 10;
     private static int currentPage = 0;
-    public static final String divider = "=======================================================";
+    public static final String divider = "============================================";
     public static final String DIVIDER = "-----------------------------------------------------------------------------------------";
     public static LinkedList<Donation> donations = new LinkedList<>();
     public static LinkedList<Donee> donees = new LinkedList<>();
@@ -135,7 +135,7 @@ public class DoneeManagement {
 
                     break;
                 case "0":
-                    donees.sort("getDoneeId",false);
+                    donees.sort("getDoneeId", false);
                     try {
                         Common.writeObjectsToFile(donors, "donors.dat");
                         Common.writeObjectsToFile(donations, "donations.dat");
@@ -343,7 +343,7 @@ public class DoneeManagement {
                 boolean onChange = false;
                 scanner.nextLine();
                 char doneeType = doneeToBeUpdated.getDoneeType();
-                System.out.print("Donee Type ([I]-Individual, [O]-Organization, [F]-Family): " + doneeToBeUpdated.getDoneeType());
+                System.out.println("Donee Type ([I]-Individual, [O]-Organization, [F]-Family): " + doneeToBeUpdated.getDoneeType());
                 Date dob = doneeToBeUpdated.getDob();
                 String name = doneeToBeUpdated.getName();
                 String doneeIc = doneeToBeUpdated.getDoneeIc();
@@ -367,10 +367,12 @@ public class DoneeManagement {
                         do {
                             System.out.println("IC No. (YYMMDD-XX-XXXX): " + doneeToBeUpdated.getDoneeIc());
                             System.out.print("Enter 0 to avoid update: ");
-                            tempInput = scanner.next();
+                            tempInput = scanner.nextLine();
                             if (!tempInput.equals("0")) {
                                 validation = Common.ICNoValidator(tempInput);
                                 onChange = true;
+                            } else {
+                                validation = true;
                             }
                         } while (!validation);
                         if (onChange) {
@@ -382,10 +384,12 @@ public class DoneeManagement {
                             System.out.println(
                                     "Date of birth (dd-MM-yyyy): " + Common.convertDateToString(doneeToBeUpdated.getDob()));
                             System.out.print("Enter 0 to avoid update: ");
-                            tempInput = scanner.next();
+                            tempInput = scanner.nextLine();
                             if (!tempInput.equals("0")) {
                                 validation = Common.dateValidator(tempInput, 'M');
                                 onChange = true;
+                            } else {
+                                validation = true;
                             }
                         } while (!validation);
                         if (onChange) {
@@ -398,10 +402,12 @@ public class DoneeManagement {
                         do {
                             System.out.println("Gender ([M] - Male, [F] - Female): " + doneeToBeUpdated.getGender());
                             System.out.print("Enter 0 to avoid update: ");
-                            tempInput = scanner.next();
+                            tempInput = scanner.nextLine();
                             if (!tempInput.equals("0")) {
                                 validation = Common.charValidator(tempInput, genderTypeCode);
                                 onChange = true;
+                            } else {
+                                validation = true;
                             }
                         } while (!validation);
                         if (onChange) {
@@ -428,10 +434,14 @@ public class DoneeManagement {
                             System.out.println(
                                     "Date of Founded (dd-MM-yyyy): " + Common.convertDateToString(doneeToBeUpdated.getDob()));
                             System.out.print("Enter 0 to avoid update: ");
-                            tempInput = scanner.next();
+                            tempInput = scanner.nextLine();
+
                             if (!tempInput.equals("0")) {
+
                                 validation = Common.dateValidator(tempInput, 'M');
                                 onChange = true;
+                            } else {
+                                validation = true;
                             }
                         } while (!validation);
                         String extractedYear = "";
@@ -456,10 +466,12 @@ public class DoneeManagement {
                         do {
                             System.out.println("SME No. (YYYYTTXXXXXX): " + doneeToBeUpdated.getDoneeIc());
                             System.out.print("Enter 0 to avoid update: ");
-                            tempInput = scanner.next();
+                            tempInput = scanner.nextLine();
                             if (!tempInput.equals("0")) {
                                 validation = Common.SmeNoValidator(tempInput, extractedYear);
                                 onChange = true;
+                            } else {
+                                validation = true;
                             }
                         } while (!validation);
                         if (onChange) {
@@ -482,10 +494,12 @@ public class DoneeManagement {
                         do {
                             System.out.println("Organization Rep. Gender ([M] - Male, [F] - Female): " + doneeToBeUpdated.getGender());
                             System.out.print("Enter 0 to avoid update: ");
-                            tempInput = scanner.next();
+                            tempInput = scanner.nextLine();
                             if (!tempInput.equals("0")) {
                                 validation = Common.charValidator(tempInput, genderTypeCode);
                                 onChange = true;
+                            } else {
+                                validation = true;
                             }
                         } while (!validation);
                         if (onChange) {
@@ -511,10 +525,12 @@ public class DoneeManagement {
                             System.out.println(
                                     "Date of Married (dd-MM-yyyy): " + Common.convertDateToString(doneeToBeUpdated.getDob()));
                             System.out.print("Enter 0 to avoid update: ");
-                            tempInput = scanner.next();
+                            tempInput = scanner.nextLine();
                             if (!tempInput.equals("0")) {
                                 validation = Common.dateValidator(tempInput, 'M');
                                 onChange = true;
+                            } else {
+                                validation = true;
                             }
                         } while (!validation);
                         if (onChange) {
@@ -539,10 +555,12 @@ public class DoneeManagement {
                         do {
                             System.out.println("Family Rep. Gender ([M] - Male, [F] - Female): " + doneeToBeUpdated.getGender());
                             System.out.print("Enter 0 to avoid update: ");
-                            tempInput = scanner.next();
+                            tempInput = scanner.nextLine();
                             if (!tempInput.equals("0")) {
                                 validation = Common.charValidator(tempInput, genderTypeCode);
                                 onChange = true;
+                            } else {
+                                validation = true;
                             }
                         } while (!validation);
                         if (onChange) {
@@ -559,10 +577,12 @@ public class DoneeManagement {
                 do {
                     System.out.println("Phone No. (Up to 14Digits): " + doneeToBeUpdated.getPhoneNo());
                     System.out.print("Enter 0 to avoid update: ");
-                    tempInput = scanner.next();
+                    tempInput = scanner.nextLine();
                     if (!tempInput.equals("0")) {
                         validation = Common.phoneNoValidator(tempInput);
                         onChange = true;
+                    } else {
+                        validation = true;
                     }
                 } while (!validation);
                 if (onChange) {
@@ -574,10 +594,12 @@ public class DoneeManagement {
                 do {
                     System.out.println("Email: " + doneeToBeUpdated.getEmail());
                     System.out.print("Enter 0 to avoid update: ");
-                    tempInput = scanner.next();
+                    tempInput = scanner.nextLine();
                     if (!tempInput.equals("0")) {
                         validation = Common.emailValidator(tempInput);
                         onChange = true;
+                    } else {
+                        validation = true;
                     }
                 } while (!validation);
                 if (onChange) {
@@ -618,10 +640,12 @@ public class DoneeManagement {
                 do {
                     System.out.println("Active Status (Y - Yes, N - No): " + doneeToBeUpdated.getActiveStatus());
                     System.out.print("Enter 0 to avoid update: ");
-                    tempInput = scanner.next();
+                    tempInput = scanner.nextLine();
                     if (!tempInput.equals("0")) {
                         validation = Common.charValidator(tempInput, yesOrNoTypeCode);
                         onChange = true;
+                    } else {
+                        validation = true;
                     }
                 } while (!validation);
                 if (onChange) {
@@ -654,6 +678,8 @@ public class DoneeManagement {
             if (tempInput.equals("Y") || tempInput.equals("y")) {
                 Donee doneeToBeRemoved = (Donee) donees.get(doneeId, "getDoneeId");
                 donees.remove(doneeToBeRemoved);
+                int currentNo = donees.size() - 1;
+
                 System.out.println("Record Deleted");
             } else {
                 break;
@@ -912,7 +938,7 @@ public class DoneeManagement {
         System.out.println(divider);
         System.out.println("Donee with all Donation Made");
         System.out.println("Donee: " + doneeId);
-        System.out.println(divider + "\n");
+        System.out.println(divider);
         Donee doneeDetail = (Donee) donees.get(doneeId, "getDoneeId");
 
         if (doneeDetail == null) {
@@ -932,8 +958,8 @@ public class DoneeManagement {
                 int start = currentPage * PAGE_SIZE;
                 int end = Math.min(start + PAGE_SIZE, donations.size());
                 System.out.println(divider + divider);
-                System.out.printf("%-5s | %-20s | %-15s | %-10s | %-10s |%n",
-                        "ID", "Donor", "Event", "Type", "Date");
+                System.out.printf("%-5s | %-20s | %-15s | %-10s | %-10s | %-10s |%n",
+                        "ID", "Donor", "Event", "Type", "Est. Value", "Date");
                 System.out.println(divider + divider);
                 double totalReceivedAmount = 0;
                 int countPrint = 1;
@@ -944,7 +970,7 @@ public class DoneeManagement {
                     if (countPrint <= printNumber && countPrint > NoPrintNumber) {
                         String donorName = "";
                         //String eventName = "";
-
+                        totalReceivedAmount += donation.getEstValue();
                         String tempType = "-";
                         switch (donation.getDonateType()) {
                             case 'F':
@@ -979,20 +1005,20 @@ public class DoneeManagement {
                         //                                    tempType + " - " +
                         //                                    Common.convertDateToString(donation.getDonationDate())
                         //                                );
-                        System.out.printf("%-5s | %-20s | %-15s | %-10s | %-10s |%n",
+                        System.out.printf("%-5s | %-20s | %-15s | %-10s | %,10.2f | %-10s |%n",
                                 donation.getDonationId(),
                                 donorName,
                                 donation.getEventId(),
                                 tempType,
+                                donation.getEstValue(),
                                 Common.convertDateToString(donation.getDonationDate()));
                         countPrint++;
                     }
                 }
 
                 System.out.println(divider + divider);
-                System.err.println("Total Amount Received: " + totalReceivedAmount);
-                System.out.println(divider + divider);
-                
+                System.err.println("Total Est. Amount Received: " + totalReceivedAmount);
+
                 System.out.println("Page " + (currentPage + 1) + " of " + ((donations.size() + PAGE_SIZE - 1) / PAGE_SIZE));
                 System.out.println("Enter '1' for next page, '2' for previous page, 0' to back:");
 
