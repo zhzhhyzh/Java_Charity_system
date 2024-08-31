@@ -48,6 +48,8 @@ public class Charity {
                 case "2":
                     DoneeManagement.display();
                     DoneeManagement.donees = new LinkedList<>();
+                    DoneeManagement.donors = new LinkedList<>();
+                    DoneeManagement.donations = new LinkedList<>();
                     break;
                 case "3":
                     DonationManagement.display();
