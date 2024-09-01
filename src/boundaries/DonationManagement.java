@@ -138,6 +138,8 @@ public class DonationManagement {
 
                 case "0":
                     donations.sort("getDonationId", false);
+                    donees.sort("getDoneeId", false);
+                    donors.sort("getDonorID", true);
                     try {
                         Common.writeObjectsToFile(donations, "donations.dat");
                         Common.writeObjectsToFile(donors, "donors.dat");
@@ -241,18 +243,19 @@ public class DonationManagement {
         //Sum up the received amount of the donee 
         Donee donee = (Donee) donees.get(doneeId, "getDoneeId");
         double AccValue = donee.getReceivedAmount() - +estValue;
-        donees.remove(donee);
-
+        
         Donee doneeUpdated = new Donee(doneeId, donee.getDoneeIc(), donee.getName(), donee.getDob(), donee.getPhoneNo(), donee.getEmail(),
                 donee.getGender(), AccValue, donee.getDoneeType(), donee.getCurrentSituation(),
                 donee.getJoinDate(), donee.getActiveStatus(), donee.getRepName());
+        donees.remove(donee);
         donees.add(doneeUpdated);
+        
 
         Donor donor = (Donor) donors.get(donorId, "getDonorID");
         AccValue = donor.getDonationAmount() + estValue;
-        donors.remove(donor);
 
         Donor donorUpdated = new Donor(donorId, donor.getName(), donor.getAge(), donor.getDob(), donor.getGender(), AccValue);
+        donors.remove(donor);
         donors.add(donorUpdated);
 
         System.out.println("Donation " + donation.getDonationId() + " Recorded.");
@@ -356,24 +359,66 @@ public class DonationManagement {
             scanner.nextLine();
             String newRemark = scanner.nextLine();
 
-            Donation updateDonation = new Donation(idInput, newDonorId, newDoneeId, newEventId, newDonateType, newEstValue, newDonationDate, newRemark);
-            donations.add(updateDonation);
-            Donee donee = (Donee) donees.get(newDoneeId, "getDoneeId");
-            double AccValue = donee.getReceivedAmount() - donationToBeAmended.getEstValue() + newEstValue;
-            donees.remove(donee);
+            Donation updatedDonation = new Donation(idInput, newDonorId, newDoneeId, newEventId, newDonateType, newEstValue, newDonationDate, newRemark);
+            donations.add(updatedDonation);
+            
+            
+            double AccValue, newValue;
+            Donee newDonee = (Donee) donees.get(newDoneeId, "getDoneeId");
+            if ( newDoneeId.equals(donationToBeAmended.getDoneeId())) {
+                AccValue = newDonee.getReceivedAmount() - donationToBeAmended.getEstValue() + newEstValue;
+                donees.remove(newDonee);
 
-            Donee doneeUpdated = new Donee(newDoneeId, donee.getDoneeIc(), donee.getName(), donee.getDob(), donee.getPhoneNo(), donee.getEmail(),
-                    donee.getGender(), AccValue, donee.getDoneeType(), donee.getCurrentSituation(),
-                    donee.getJoinDate(), donee.getActiveStatus(), donee.getRepName());
-            donees.add(doneeUpdated);
-
+                Donee doneeUpdated = new Donee(newDoneeId, newDonee.getDoneeIc(), newDonee.getName(), newDonee.getDob(), newDonee.getPhoneNo(), newDonee.getEmail(),
+                        newDonee.getGender(), AccValue, newDonee.getDoneeType(), newDonee.getCurrentSituation(),
+                        newDonee.getJoinDate(), newDonee.getActiveStatus(), newDonee.getRepName());
+                donees.add(doneeUpdated);
+            }
+            else {
+                Donee oldDonee = (Donee) donees.get(donationToBeAmended.getDoneeId(), "getDoneeId");
+                newValue = oldDonee.getReceivedAmount() - newEstValue;
+                donees.remove(oldDonee);
+                
+                Donee oldDoneeUpdated = new Donee(oldDonee.getDoneeId(), oldDonee.getDoneeIc(), oldDonee.getName(), oldDonee.getDob(), oldDonee.getPhoneNo(), oldDonee.getEmail(),
+                        oldDonee.getGender(), newValue, oldDonee.getDoneeType(), oldDonee.getCurrentSituation(),
+                        oldDonee.getJoinDate(), oldDonee.getActiveStatus(), oldDonee.getRepName());
+                donees.add(oldDoneeUpdated);
+                
+                AccValue = newDonee.getReceivedAmount() + newEstValue;
+                donees.remove(newDonee);
+                
+                Donee newDoneeUpdated = new Donee(newDoneeId, newDonee.getDoneeIc(), newDonee.getName(), newDonee.getDob(), newDonee.getPhoneNo(), newDonee.getEmail(),
+                        newDonee.getGender(), AccValue, newDonee.getDoneeType(), newDonee.getCurrentSituation(),
+                        newDonee.getJoinDate(), newDonee.getActiveStatus(), newDonee.getRepName());
+                donees.add(newDoneeUpdated);      
+            }
+            
             Donor donor = (Donor) donors.get(newDonorId, "getDonorID");
-            AccValue = donor.getDonationAmount() - donationToBeAmended.getEstValue() + newEstValue;
-            donors.remove(donor);
+            if ( newDonorId.equals(donationToBeAmended.getDonorId())){
+                AccValue = donor.getDonationAmount() - donationToBeAmended.getEstValue() + newEstValue;
+                donors.remove(donor);
 
-            Donor donorUpdated = new Donor(newDonorId, donor.getName(), donor.getAge(), donor.getDob(), donor.getGender(), AccValue);
-            donors.add(donorUpdated);
+                Donor donorUpdated = new Donor(newDonorId, donor.getName(), donor.getAge(), donor.getDob(), donor.getGender(), AccValue);
+                donors.add(donorUpdated);
+            }
+            else {   
+                Donor oldDonor = (Donor) donors.get(donationToBeAmended.getDonorId(),"getDonorID");
+                newValue = oldDonor.getDonationAmount() - newEstValue ;
+                donors.remove(oldDonor);
+                
+                Donor oldDonorUpdated = new Donor(oldDonor.getDonorID(),oldDonor.getName(), oldDonor.getAge(), oldDonor.getDob(), oldDonor.getGender(), newValue);
+                donors.add(oldDonorUpdated);
+                
+                AccValue = donor.getDonationAmount() + newEstValue;
+                donors.remove(donor);
+                
+                Donor newDonorUpdated = new Donor(newDonorId, donor.getName(), donor.getAge(), donor.getDob(), donor.getGender(), AccValue);
+                donors.add(newDonorUpdated);
+            }
             System.out.println("Donation Record Updated.");
+
+//            Donee newDonee = (Donee) donees.get(newDoneeId, "getDoneeId");
+//            double AccValue = donee.getReceivedAmount() + newEstValue;
 
         } else {
             System.out.println("Donation not found.");
