@@ -12,6 +12,8 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import utils.LinkedList;
@@ -120,10 +122,15 @@ public class DonorManagement {
                         System.out.print("Enter date of birth: ");
                         tempInput = scanner.next();
                         validation = Common.dateValidator(tempInput, 'M'
-                        );
+                        ); 
                     } while (!validation);
                     String dateString = tempInput;
-                    Date dob = new Date(Integer.parseInt(dateString.split("-")[0]), Integer.parseInt(dateString.split("-")[1]), Integer.parseInt(dateString.split("-")[2]));
+                    Date dob = null;
+                try {
+                    dob = new SimpleDateFormat("dd-MM-yyyy").parse(dateString);
+                } catch (ParseException ex) {
+                    Logger.getLogger(DonorManagement.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
                     LinkedList <Donor> tempDonors = donors;
                     tempDonors.sort("getDonorID",true);
@@ -133,7 +140,7 @@ public class DonorManagement {
                         currentNo = Integer.parseInt(tempDonors.get(tempDonors.size() - 1).getDonorID()) + 1;
 
                     }
-                    Donor donor = new Donor(Integer.toString(currentNo), name, age, new Date(), gender);
+                    Donor donor = new Donor(Integer.toString(currentNo), name, age, dob, gender);
                     donors.add(donor);
                     System.out.println("Successfully added new donor with ID: " + currentNo + "\n");
                     break;
@@ -152,8 +159,8 @@ public class DonorManagement {
                 case "3":
                     System.out.print("Enter ID: ");
                     String idToBeUpdated = scanner.next();
+                    scanner.nextLine();
                     Donor donorToBeUpdated = (Donor) donors.get(idToBeUpdated, "getDonorID");
-                    double donationAmount2 = donorToBeUpdated.getDonationAmount();
                     if (donorToBeUpdated == null) {
                         System.out.println("Donor not found!\n");
                         break;
@@ -162,11 +169,11 @@ public class DonorManagement {
 
                     String tempInput2;
                     boolean validation2 = false;
-
+                    
                     do {
                         System.out.print("Enter name: ");
                         tempInput2 = scanner.nextLine();
-                        validation2 = true;
+                        validation2 = Common.requiredField(tempInput2);
                     } while (!validation2);
                     String name2 = tempInput2;
 
@@ -192,11 +199,19 @@ public class DonorManagement {
                         );
                     } while (!validation2);
                     String dateString2 = tempInput2;
-                    Date dob2 = new Date(Integer.parseInt(dateString2.split("-")[0]), Integer.parseInt(dateString2.split("-")[1]), Integer.parseInt(dateString2.split("-")[2]));
-                    Donor donorObjToBeUpdated = new Donor(idToBeUpdated, name2, age2, new Date(), gender2, donationAmount2);
+                                        Date dob2 = null;
+
+                      try {
+                    dob2 = new SimpleDateFormat("dd-MM-yyyy").parse(dateString2);
+                } catch (ParseException ex) {
+                    Logger.getLogger(DonorManagement.class.getName()).log(Level.SEVERE, null, ex);
+                }
+ Donor donorObjToBeUpdated = new Donor(idToBeUpdated, name2, age2, dob2, gender2, donorToBeUpdated.getDonationAmount());
                     donors.add(donorObjToBeUpdated);
+                    donors.sort("getDonorID", true);
                     System.out.println("Successfully updated donor with ID: " + idToBeUpdated + "\n");
                     break;
+
                 case "4":
                     System.out.print("Enter ID: ");
                     String idToBeFound = scanner.next();

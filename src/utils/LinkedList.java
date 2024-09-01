@@ -157,10 +157,10 @@ public class LinkedList<E>
         ptr1.data = tmp;
     }
 
-    public void sort(String getterMethod, boolean isInteger) {
-        if(!isInteger){
-            isInteger = false;
-        }
+    public void sort(String fieldGetterMethod, boolean fieldIsDigit) {
+//        if(!fieldIsDigit){
+//            fieldIsDigit = false;
+//        }
         boolean swapped;
         Node current;
 
@@ -173,12 +173,12 @@ public class LinkedList<E>
             current = head;
             try {
 
-                Method method = current.data.getClass().getDeclaredMethod(getterMethod);
+                Method method = current.data.getClass().getDeclaredMethod(fieldGetterMethod);
 
                 while (current.next != null) {
                     String valueFound = (String) method.invoke(current.data);
                     String nextValueFound = (String) method.invoke(current.next.data);
-                    if(isInteger){
+                    if(fieldIsDigit){
                         if (Integer.parseInt(valueFound)>Integer.parseInt(nextValueFound)) {
                         swap(current, current.next);
                         swapped = true;
