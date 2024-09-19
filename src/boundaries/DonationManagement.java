@@ -656,7 +656,7 @@ public class DonationManagement {
             String doneeName = getDoneeName(donation.getDoneeId());
             String tempType = getDonationType(donation.getDonateType());
 
-            reportContent.append(String.format("%-5s | %-20s | %-20s | %-15s | %-10s | %-10s | %-10s%n",
+            reportContent.append(String.format("%-5s | %-25s | %-25s | %-15s | %-10s | %-10s | %-10s%n",
                     donation.getDonationId(),
                     donorName,
                     doneeName,
