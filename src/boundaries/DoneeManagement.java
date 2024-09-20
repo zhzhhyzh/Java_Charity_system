@@ -225,7 +225,7 @@ public class DoneeManagement {
                 String extractedYear = res[2];
 
                 do {
-                    System.out.print("Enter SME No. (YYYYTTXXXX): ");
+                    System.out.print("Enter SME No. (YYYYTTXXXXXX): ");
                     tempInput = scanner.next();
                     validation = Common.SmeNoValidator(tempInput, extractedYear);
                 } while (!validation);
